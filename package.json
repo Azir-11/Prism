@@ -1,0 +1,36 @@
+{
+  "name": "prism-monorepo",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Prism — generate a harmonious, contrast-aware design-token system from one or a few seed colors.",
+  "license": "MIT",
+  "author": "青菜白玉汤",
+  "type": "module",
+  "scripts": {
+    "build": "pnpm -r --filter \"./packages/*\" build",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "pnpm -r --filter \"./packages/*\" run typecheck",
+    "lint": "oxlint .",
+    "lint:fix": "oxlint --fix .",
+    "format": "oxfmt .",
+    "format:check": "oxfmt --check .",
+    "check": "pnpm lint && pnpm format:check && pnpm test",
+    "play": "pnpm --filter @prism/playground dev",
+    "play:build": "pnpm --filter @prism/playground build",
+    "docs:dev": "pnpm --filter @prism/docs docs:dev",
+    "docs:build": "pnpm --filter @prism/docs docs:build"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "oxfmt": "^0.56.0",
+    "oxlint": "^1.71.0",
+    "tsdown": "^0.22.3",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.9"
+  },
+  "engines": {
+    "node": ">=20.11"
+  },
+  "packageManager": "pnpm@11.7.0"
+}

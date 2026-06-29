@@ -1,0 +1,20 @@
+{
+  "$schema": "https://raw.githubusercontent.com/oxc-project/oxc/main/npm/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "unicorn", "import"],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn",
+    "perf": "warn"
+  },
+  "ignorePatterns": [
+    "**/dist/**",
+    "**/node_modules/**",
+    "**/.vitepress/cache/**",
+    "**/.vitepress/dist/**"
+  ],
+  "rules": {
+    "no-console": "off",
+    "eslint/no-unused-vars": "warn",
+    "import/no-unassigned-import": "off"
+  }
+}

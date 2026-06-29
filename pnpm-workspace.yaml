@@ -1,0 +1,15 @@
+packages:
+  - "packages/*"
+  - "playground"
+  - "docs"
+
+allowBuilds:
+  esbuild: true
+
+onlyBuiltDependencies:
+  - esbuild
+  - oxlint
+  - oxfmt
+  - unrs-resolver
+  - "@oxc-project/runtime"
+  - rolldown
