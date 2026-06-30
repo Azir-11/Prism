@@ -21,8 +21,8 @@ export default defineConfig({
   themeConfig: {
     nav: [
       { text: "指南", link: "/guide/what-is-prism", activeMatch: "/guide/" },
+      { text: "生成逻辑", link: "/guide/how-it-works" },
       { text: "API", link: "/api/core", activeMatch: "/api/" },
-      { text: "设计哲学", link: "/guide/philosophy" },
     ],
     sidebar: {
       "/guide/": [
@@ -31,12 +31,13 @@ export default defineConfig({
           items: [
             { text: "Prism 是什么", link: "/guide/what-is-prism" },
             { text: "快速上手", link: "/guide/getting-started" },
+            { text: "生成逻辑", link: "/guide/how-it-works" },
           ],
         },
         {
-          text: "理念 · 色彩美学",
+          text: "深入原理",
           items: [
-            { text: "设计哲学", link: "/guide/philosophy" },
+            { text: "设计理念", link: "/guide/philosophy" },
             { text: "为什么是 OKLCH", link: "/guide/oklch" },
             { text: "色阶与角色合约", link: "/guide/scale" },
             { text: "调和：从一到多", link: "/guide/harmony" },

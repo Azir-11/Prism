@@ -1,13 +1,37 @@
 :root {
+  --vp-font-family-base:
+    "Inter Variable", -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB",
+    "Microsoft YaHei", "Segoe UI", sans-serif;
+  --vp-font-family-display:
+    "Plus Jakarta Sans Variable", "Inter Variable", "PingFang SC", "Microsoft YaHei", sans-serif;
+
   --vp-c-brand-1: #2563eb;
   --vp-c-brand-2: #3b82f6;
   --vp-c-brand-3: #60a5fa;
+
   --vp-home-hero-name-color: transparent;
-  --vp-home-hero-name-background: linear-gradient(120deg, #3b82f6, #8b5cf6 60%, #ec4899);
+  --vp-home-hero-name-background: linear-gradient(120deg, #3b82f6, #8b5cf6 55%, #ec4899);
 }
 
 .dark {
   --vp-c-brand-1: #60a5fa;
   --vp-c-brand-2: #3b82f6;
   --vp-c-brand-3: #2563eb;
+}
+
+/* Give headings and the hero a little more character. */
+.VPHero .name,
+.VPHero .text,
+h1,
+h2.vp-doc-heading,
+.vp-doc h1,
+.vp-doc h2 {
+  font-family: var(--vp-font-family-display);
+  letter-spacing: -0.018em;
+}
+
+body {
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }

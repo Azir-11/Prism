@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { PrismInput, PrismTheme } from "@prism/core";
-import { generateTheme } from "@prism/core";
+import { generateTheme, STEP_KEYS } from "@prism/core";
 import { toCssVariables } from "@prism/css";
-import { reactive, ref, shallowRef, watchEffect } from "vue";
+import { computed, reactive, ref, shallowRef, watchEffect } from "vue";
 import ControlPanel from "./components/ControlPanel.vue";
 import ExportView from "./components/ExportView.vue";
 import PaletteView from "./components/PaletteView.vue";
@@ -58,6 +58,16 @@ watchEffect(() => {
   }
 });
 
+const stepKeys = STEP_KEYS;
+const primaryScale = computed(() => {
+  const t = theme.value;
+  if (!t) return null;
+  return form.appearance === "dark" ? t.scales.primary.dark : t.scales.primary.light;
+});
+const scaleCount = computed(() => (theme.value ? Object.keys(theme.value.scales).length : 0));
+const tokenCount = computed(() => (theme.value ? Object.keys(theme.value.semantic).length : 0));
+const checkCount = computed(() => theme.value?.report.checks.length ?? 0);
+
 const STYLE_ID = "prism-live-theme";
 watchEffect(() => {
   const t = theme.value;
@@ -82,11 +92,8 @@ watchEffect(() => {
     <main class="main">
       <div class="topbar">
         <div>
-          <div class="section-title" style="font-size: 18px">主题预览</div>
-          <div class="muted" style="font-size: 12.5px">
-            从 1 个主题色出发，自动生成
-            {{ theme ? Object.keys(theme.scales).length : 0 }} 条和谐色板。
-          </div>
+          <div class="section-title" style="font-size: 19px">主题预览</div>
+          <div class="muted" style="font-size: 12.5px">一个主题色 → 一整套可直接落地的配色。</div>
         </div>
         <div class="seg">
           <button
@@ -101,11 +108,45 @@ watchEffect(() => {
         </div>
       </div>
 
-      <div v-if="error" class="card" style="border-color: var(--destructive, red)">
+      <div v-if="error" class="card" style="border-color: var(--destructive, #ef4444)">
         <strong>无法解析颜色：</strong> {{ error }}
       </div>
 
-      <template v-if="theme">
+      <template v-if="theme && primaryScale">
+        <section class="hero">
+          <div class="hero-ramp">
+            <span
+              v-for="s in stepKeys"
+              :key="s"
+              :style="{ background: primaryScale.steps[s].oklch }"
+            />
+          </div>
+          <div class="hero-body">
+            <div class="hero-chip" :style="{ background: form.primary }" />
+            <div class="hero-meta">
+              <span class="muted" style="font-size: 12px">主题色</span>
+              <span class="hero-seed">{{ form.primary.toUpperCase() }}</span>
+            </div>
+            <div class="hero-stats">
+              <div class="hero-stat">
+                <b>{{ scaleCount }}</b
+                ><span>条色板</span>
+              </div>
+              <div class="hero-stat">
+                <b>{{ tokenCount }}</b
+                ><span>语义令牌</span>
+              </div>
+              <div class="hero-stat">
+                <b>{{ checkCount }}</b
+                ><span>对比度检查</span>
+              </div>
+              <div class="hero-stat" style="justify-content: center">
+                <span v-if="theme.report.passes" class="badge-pass">✓ 全部达标</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <PaletteView :theme="theme" :appearance="form.appearance" />
         <PreviewView />
         <ExportView :theme="theme" />

@@ -2,8 +2,8 @@
 layout: home
 hero:
   name: Prism
-  text: 一种颜色，一整套和谐的主题
-  tagline: OKLCH-first · APCA 对比度求解 · 明暗双主题 · 一键产出 CSS / Tailwind / JSON
+  text: 没有设计师，也能配出好看的主题
+  tagline: 给一个你喜欢的颜色，Prism 自动生成专业、协调、明暗双全的整套配色 —— 让不懂配色的人，也能轻松拥有设计师级的视觉。
   image:
     src: data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%233b82f6'/%3E%3Cstop offset='0.6' stop-color='%238b5cf6'/%3E%3Cstop offset='1' stop-color='%23ec4899'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpolygon points='100,24 168,150 32,150' fill='none' stroke='url(%23g)' stroke-width='10' stroke-linejoin='round'/%3E%3C/svg%3E
     alt: Prism
@@ -12,35 +12,35 @@ hero:
       text: 快速上手
       link: /guide/getting-started
     - theme: alt
-      text: 设计哲学
-      link: /guide/philosophy
+      text: 它是怎么做到的
+      link: /guide/how-it-works
     - theme: alt
       text: GitHub
       link: https://github.com/Azir-11/Prism
 features:
   - icon: 🎯
-    title: 一即一切
-    details: 给一个品牌色，就能推导出次色、第三色、四种语义色与中性色 —— 每一条都是完整的 11 阶色板。颜色之间的关系是算出来的，不是猜的。
-  - icon: 🧠
-    title: 感知均匀
-    details: 全程在 OKLCH 空间生成。等量的明度变化看起来就是等量的变化，色相在深浅之间保持稳定，告别 HSL 那种忽明忽暗、越深越脏的色阶。
+    title: 只需挑一个颜色
+    details: 你选一个喜欢的主题色，次色、语义色、中性色和每一档深浅都自动配好。不用一格格调，也不用懂色彩理论。
+  - icon: ✨
+    title: 自动就协调
+    details: 背后用 OKLCH 让色阶感知均匀 —— 不会忽明忽暗，越深也不发脏。你不必理解原理，得到的结果自然耐看。
   - icon: 🔍
-    title: 对比度是解出来的
-    details: 文字色不靠约定，而是用 APCA 二分求解到目标 Lc。无论品牌色是什么色相，正文与强调文字都达标 —— 这是 HSV 调色系统给不了的保证。
+    title: 文字一定看得清
+    details: 每一处文字、按钮的配色都用 APCA 算到达标。再也不用纠结“这个字放在这个底色上，到底够不够清楚”。
   - icon: 🌗
-    title: 明暗成对
-    details: 暗色不是把亮色取反，而是在同一套角色合约下镜像明度阶，并补偿暗背景下的色彩衰减。语义层是引用，切换暗色只需重定义底层变量。
+    title: 暗色一并配好
+    details: 暗色模式不是把亮色粗暴反转，而是自动生成同样好看、同样可读的一整套，省去你重配一遍的功夫。
   - icon: 🧩
-    title: 核心 + 适配器
-    details: "@prism/core 只产出颜色与令牌；@prism/css、@prism/tailwind 等适配器负责落地。要支持 shadcn 或 Material？再写一个适配器就好。"
+    title: 拿来即用
+    details: 一键产出 CSS 变量、Tailwind v4 或 JSON，直接接进现有项目；语义令牌命名贴近 shadcn，几乎零迁移成本。
   - icon: 📐
-    title: 品牌色不可亵渎
-    details: 你输入的那个颜色会被原样钉进色板最接近的一阶 —— 一个比特都不改。其余各阶围绕它生长。
+    title: 你的颜色不会被改
+    details: 你选定的那个颜色会被原样保留、钉进色板，其余颜色都围绕它生长 —— 品牌色始终是你说了算。
 ---
 
-## 三秒钟感受一下
+## 不需要懂配色，改个颜色就行
 
-下面是一条由**单个**品牌色实时生成的色板。改一下颜色，看它如何重排：
+下面这条色板，由**一个**主题色实时生成。改一下颜色，看 Prism 怎么把它铺成一整套协调的深浅：
 
 <PrismPalette color="#6366f1" />
 
@@ -56,4 +56,4 @@ document.head.append(
 );
 ```
 
-就这些。剩下的 —— 次色、语义色、暗色、对比度达标 —— Prism 都替你算好了。
+这就够了。次色、语义色、暗色、文字对比度 —— 那些原本要请设计师把关的事，Prism 都替你算好了。想知道它是怎么做到的？看 [生成逻辑](/guide/how-it-works)。

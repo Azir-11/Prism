@@ -1,19 +1,34 @@
-/* The playground themes itself with the tokens it generates (dogfooding). */
+/* The playground themes itself with the tokens it generates (dogfooding),
+   on top of a refined, design-tool-grade chrome. */
 :root {
   --background: oklch(0.99 0.002 250);
   --foreground: oklch(0.2 0.02 250);
   --card: oklch(1 0 0);
-  --muted: oklch(0.96 0.004 250);
+  --muted: oklch(0.967 0.004 250);
   --muted-foreground: oklch(0.5 0.02 250);
-  --border: oklch(0.9 0.006 250);
+  --border: oklch(0.92 0.006 250);
   --primary: oklch(0.62 0.21 256);
   --primary-foreground: oklch(1 0 0);
   --ring: oklch(0.62 0.21 256);
+
+  --radius: 16px;
+  --radius-sm: 10px;
+  --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.05);
+  --shadow-md: 0 1px 2px rgba(16, 24, 40, 0.04), 0 14px 34px -18px rgba(16, 24, 40, 0.22);
+  --shadow-lg: 0 1px 2px rgba(16, 24, 40, 0.04), 0 28px 60px -28px rgba(16, 24, 40, 0.32);
+  --font-body:
+    "Inter Variable", -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB",
+    "Microsoft YaHei", "Segoe UI", sans-serif;
+  --font-display:
+    "Plus Jakarta Sans Variable", "Inter Variable", "PingFang SC", "Microsoft YaHei", sans-serif;
+
   color-scheme: light;
 }
 
 :root.dark {
   color-scheme: dark;
+  --shadow-md: 0 1px 2px rgba(0, 0, 0, 0.4), 0 14px 34px -18px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 1px 2px rgba(0, 0, 0, 0.4), 0 28px 60px -24px rgba(0, 0, 0, 0.7);
 }
 
 * {
@@ -27,28 +42,47 @@ body {
 }
 
 body {
-  font-family:
-    "Inter",
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    "PingFang SC",
-    "Hiragino Sans GB",
-    "Microsoft YaHei",
-    sans-serif;
+  font-family: var(--font-body);
+  font-weight: 400;
   background: var(--background);
   color: var(--foreground);
   font-size: 14px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
   transition:
-    background 0.25s ease,
-    color 0.25s ease;
+    background 0.3s ease,
+    color 0.3s ease;
 }
 
+/* Subtle dotted texture + a faint brand glow behind everything. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      900px 500px at 78% -8%,
+      color-mix(in oklab, var(--primary) 14%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      700px 420px at 0% 0%,
+      color-mix(in oklab, var(--primary) 7%, transparent),
+      transparent 60%
+    );
+}
+
+::selection {
+  background: color-mix(in oklab, var(--primary) 28%, transparent);
+}
+
+/* ----- layout ----- */
 .app {
   display: grid;
-  grid-template-columns: 340px 1fr;
+  grid-template-columns: 360px 1fr;
   min-height: 100vh;
 }
 
@@ -58,53 +92,67 @@ body {
   align-self: start;
   height: 100vh;
   overflow-y: auto;
-  padding: 24px;
+  padding: 26px 24px 40px;
   border-right: 1px solid var(--border);
-  background: var(--card);
+  background: color-mix(in oklab, var(--card) 86%, transparent);
+  backdrop-filter: blur(8px);
 }
 
 .main {
-  padding: 28px 36px 80px;
-  max-width: 1100px;
+  padding: 30px 40px 90px;
+  max-width: 1180px;
 }
 
+/* ----- brand ----- */
 .brand {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 4px;
+  gap: 11px;
+  margin-bottom: 5px;
 }
 
 .brand h1 {
-  font-size: 20px;
-  font-weight: 700;
+  font-family: var(--font-display);
+  font-size: 23px;
+  font-weight: 800;
   margin: 0;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.03em;
+  background: linear-gradient(
+    120deg,
+    var(--primary),
+    color-mix(in oklab, var(--primary) 40%, #ec4899)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .brand .triangle {
-  width: 22px;
-  height: 22px;
+  width: 26px;
+  height: 26px;
+  filter: drop-shadow(0 4px 10px color-mix(in oklab, var(--primary) 45%, transparent));
 }
 
 .tagline {
   color: var(--muted-foreground);
   font-size: 12.5px;
-  margin: 0 0 22px;
+  margin: 0 0 24px;
+  line-height: 1.55;
 }
 
+/* ----- form controls ----- */
 .field {
-  margin-bottom: 18px;
+  margin-bottom: 20px;
 }
 
 .field > label {
   display: block;
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 600;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
   color: var(--muted-foreground);
-  margin-bottom: 8px;
+  margin-bottom: 9px;
 }
 
 .color-row {
@@ -114,33 +162,41 @@ body {
 }
 
 .color-row input[type="color"] {
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
   padding: 0;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   background: none;
   cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.15s ease;
+}
+
+.color-row input[type="color"]:hover {
+  transform: scale(1.05);
 }
 
 .color-row input[type="text"],
 .text-input {
   flex: 1;
   min-width: 0;
-  height: 38px;
-  padding: 0 10px;
+  height: 40px;
+  padding: 0 12px;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   background: var(--background);
   color: var(--foreground);
-  font-family: "SFMono-Regular", ui-monospace, "Cascadia Code", monospace;
+  font-family: var(--font-body);
+  font-feature-settings: "tnum" 1;
   font-size: 13px;
 }
 
-input:focus,
-select:focus {
+input:focus-visible,
+select:focus-visible,
+button:focus-visible {
   outline: 2px solid var(--ring);
-  outline-offset: 1px;
+  outline-offset: 2px;
 }
 
 .row {
@@ -159,20 +215,29 @@ select:focus {
   font-size: 13px;
 }
 
-select,
-.select {
-  height: 34px;
+.switch input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+
+select {
+  height: 38px;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   background: var(--background);
   color: var(--foreground);
-  padding: 0 8px;
+  padding: 0 10px;
   font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
 }
 
 input[type="range"] {
   width: 100%;
   accent-color: var(--primary);
+  margin-top: 4px;
 }
 
 .muted {
@@ -182,72 +247,208 @@ input[type="range"] {
 .divider {
   height: 1px;
   background: var(--border);
-  margin: 20px 0;
+  margin: 22px 0;
 }
 
+/* ----- cards ----- */
 .card {
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 20px 22px;
-  margin-bottom: 24px;
+  border-radius: var(--radius);
+  padding: 22px 24px;
+  margin-bottom: 26px;
+  box-shadow: var(--shadow-md);
 }
 
 .section-title {
-  font-size: 16px;
+  font-family: var(--font-display);
+  font-size: 16.5px;
   font-weight: 700;
-  margin: 0 0 2px;
-  letter-spacing: -0.01em;
+  margin: 0 0 3px;
+  letter-spacing: -0.015em;
 }
 
 .section-sub {
   font-size: 12.5px;
   color: var(--muted-foreground);
-  margin: 0 0 16px;
+  margin: 0 0 18px;
+  line-height: 1.55;
 }
 
+/* ----- top bar ----- */
 .topbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 24px;
+  gap: 16px;
 }
 
+/* ----- segmented control ----- */
 .seg {
   display: inline-flex;
+  padding: 3px;
   border: 1px solid var(--border);
-  border-radius: 9px;
-  overflow: hidden;
+  border-radius: 999px;
+  background: var(--muted);
+  gap: 2px;
 }
 
 .seg button {
   border: none;
-  background: var(--card);
+  background: transparent;
   color: var(--muted-foreground);
-  padding: 7px 14px;
+  padding: 7px 15px;
   font-size: 13px;
+  font-weight: 500;
+  border-radius: 999px;
   cursor: pointer;
+  transition: all 0.18s ease;
 }
 
 .seg button.active {
-  background: var(--primary);
-  color: var(--primary-foreground);
+  background: var(--card);
+  color: var(--foreground);
+  box-shadow: var(--shadow-sm);
 }
 
+/* ----- buttons ----- */
 .btn {
   border: 1px solid var(--border);
   background: var(--card);
   color: var(--foreground);
-  border-radius: 8px;
-  padding: 7px 12px;
+  border-radius: var(--radius-sm);
+  padding: 8px 13px;
   font-size: 13px;
+  font-weight: 500;
   cursor: pointer;
+  font-family: inherit;
+  transition: all 0.16s ease;
 }
 
 .btn:hover {
   background: var(--muted);
+  border-color: color-mix(in oklab, var(--foreground) 18%, var(--border));
 }
 
 button {
   font-family: inherit;
+}
+
+/* ----- scrollbar ----- */
+.sidebar::-webkit-scrollbar,
+.code::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.sidebar::-webkit-scrollbar-thumb,
+.code::-webkit-scrollbar-thumb {
+  background: color-mix(in oklab, var(--muted-foreground) 30%, transparent);
+  border-radius: 999px;
+  border: 3px solid transparent;
+  background-clip: padding-box;
+}
+
+/* ----- hero strip ----- */
+.hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-lg);
+  margin-bottom: 28px;
+  background: var(--card);
+}
+
+.hero-ramp {
+  display: flex;
+  height: 92px;
+}
+
+.hero-ramp > span {
+  flex: 1;
+}
+
+.hero-body {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 20px 24px;
+}
+
+.hero-chip {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  box-shadow:
+    var(--shadow-md),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+  flex-shrink: 0;
+}
+
+.hero-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hero-seed {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  font-feature-settings: "tnum" 1;
+}
+
+.hero-stats {
+  margin-left: auto;
+  display: flex;
+  gap: 26px;
+  flex-wrap: wrap;
+}
+
+.hero-stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.hero-stat b {
+  font-family: var(--font-display);
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.hero-stat span {
+  font-size: 11.5px;
+  color: var(--muted-foreground);
+}
+
+.badge-pass {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--primary) 14%, transparent);
+  color: var(--primary);
+}
+
+@media (max-width: 1000px) {
+  .app {
+    grid-template-columns: 1fr;
+  }
+  .sidebar {
+    position: static;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+  .main {
+    padding: 24px 20px 70px;
+  }
 }

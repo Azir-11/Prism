@@ -10,6 +10,8 @@
     "typecheck": "vue-tsc --noEmit"
   },
   "dependencies": {
+    "@fontsource-variable/inter": "^5.2.8",
+    "@fontsource-variable/plus-jakarta-sans": "^5.2.8",
     "@prism/core": "workspace:*",
     "@prism/css": "workspace:*",
     "@prism/tailwind": "workspace:*",

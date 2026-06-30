@@ -1,3 +1,5 @@
+import "@fontsource-variable/inter";
+import "@fontsource-variable/plus-jakarta-sans";
 import type { Theme } from "vitepress";
 import DefaultTheme from "vitepress/theme";
 import PrismPalette from "./PrismPalette.vue";
