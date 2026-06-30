@@ -3,6 +3,7 @@ import type { PrismInput, PrismTheme } from "@prism/core";
 import { generateTheme, STEP_KEYS } from "@prism/core";
 import { toCssVariables } from "@prism/css";
 import { computed, reactive, ref, shallowRef, watchEffect } from "vue";
+import ContrastView from "./components/ContrastView.vue";
 import ControlPanel from "./components/ControlPanel.vue";
 import ExportView from "./components/ExportView.vue";
 import PaletteView from "./components/PaletteView.vue";
@@ -149,6 +150,7 @@ watchEffect(() => {
 
         <PaletteView :theme="theme" :appearance="form.appearance" />
         <PreviewView />
+        <ContrastView :theme="theme" :appearance="form.appearance" />
         <ExportView :theme="theme" />
       </template>
 

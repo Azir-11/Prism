@@ -117,6 +117,7 @@ function buildReport(
         foregroundHex: fg.hex,
         backgroundHex: bg.hex,
         apcaLc: Math.round(lc * 10) / 10,
+        apcaTarget: pair.target,
         wcag: Math.round(wcag * 100) / 100,
         passApca: Math.abs(lc) >= pair.target,
         passWcagAA: wcag >= 4.5,

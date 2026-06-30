@@ -42,6 +42,7 @@ export default defineConfig({
             { text: "色阶与角色合约", link: "/guide/scale" },
             { text: "调和：从一到多", link: "/guide/harmony" },
             { text: "对比度：求解而非祈祷", link: "/guide/contrast" },
+            { text: "对比度指标：APCA 与 WCAG", link: "/guide/contrast-metrics" },
             { text: "暗色模式", link: "/guide/dark-mode" },
           ],
         },

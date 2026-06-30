@@ -145,9 +145,11 @@ export interface ContrastCheck {
   backgroundHex: string;
   /** Signed APCA Lc. */
   apcaLc: number;
+  /** The APCA Lc this pair is expected to reach. */
+  apcaTarget: number;
   /** WCAG 2.x contrast ratio. */
   wcag: number;
-  /** APCA |Lc| >= 60. */
+  /** APCA |Lc| >= apcaTarget. */
   passApca: boolean;
   /** WCAG ratio >= 4.5 (AA body text). */
   passWcagAA: boolean;
