@@ -19,6 +19,31 @@ export interface Form {
   appearance: "light" | "dark";
 }
 
+/** The canonical initial form — also the target of the "reset" action. */
+export const DEFAULT_FORM: Form = {
+  primary: "#3b82f6",
+  useSecondary: false,
+  secondary: "#f43f5e",
+  useTertiary: false,
+  tertiary: "#14b8a6",
+  overrideSemantics: false,
+  info: "#0ea5e9",
+  success: "#22c55e",
+  warning: "#f59e0b",
+  error: "#ef4444",
+  neutralMode: "auto",
+  neutral: "#71717a",
+  neutralChroma: 0.008,
+  textLc: 60,
+  textContrastLc: 90,
+  gamut: "srgb",
+  hueTorsion: 4,
+  appearance: "light",
+};
+
+/** Format used when copying individual swatches / driving export output. */
+export type CopyFormat = "hex" | "oklch" | "rgb" | "hsl";
+
 export const PRESETS: { name: string; primary: string }[] = [
   { name: "经典蓝", primary: "#3b82f6" },
   { name: "靛青", primary: "#6366f1" },

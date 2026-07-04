@@ -1,13 +1,32 @@
 <script setup lang="ts">
-import type { Appearance, PrismTheme, Scale } from "@prism/core";
-import { STEP_KEYS } from "@prism/core";
+import type {
+  Appearance,
+  ColorFormat,
+  CvdType,
+  PrismTheme,
+  Scale,
+  Swatch,
+} from "@simple-prism/core";
+import { deltaEOK, formatIn, formatOklch, simulateCvd, STEP_KEYS } from "@simple-prism/core";
 import { computed, ref } from "vue";
+import RampChart from "./RampChart.vue";
 
-const props = defineProps<{ theme: PrismTheme; appearance: Appearance }>();
+const props = defineProps<{ theme: PrismTheme; appearance: Appearance; cvd?: CvdType | null }>();
 
 const steps = STEP_KEYS;
 const copied = ref("");
 let timer: ReturnType<typeof setTimeout> | undefined;
+
+const COPY_FORMATS: ColorFormat[] = ["hex", "oklch", "rgb", "hsl"];
+const copyFormat = ref<ColorFormat>("hex");
+function valueOf(sw: Swatch): string {
+  return formatIn(sw.value, copyFormat.value);
+}
+
+// Swatch background, optionally passed through a color-vision-deficiency simulation.
+function bgOf(sw: Swatch): string {
+  return props.cvd ? formatOklch(simulateCvd(sw.value, props.cvd)) : sw.oklch;
+}
 
 function scaleOf(name: string): Scale {
   const pair = props.theme.scales[name];
@@ -15,6 +34,25 @@ function scaleOf(name: string): Scale {
 }
 
 const scaleNames = computed(() => Object.keys(props.theme.scales));
+const chartScale = ref("primary");
+
+// Semantic solids that stop being distinguishable once CVD-simulated.
+const cvdWarnings = computed<string[]>(() => {
+  const type = props.cvd;
+  if (!type) return [];
+  const solids = scaleNames.value
+    .filter((n) => n !== "neutral")
+    .map((n) => ({ n, o: scaleOf(n).steps[500].value }));
+  const out: string[] = [];
+  for (let i = 0; i < solids.length; i++) {
+    for (let j = i + 1; j < solids.length; j++) {
+      const before = deltaEOK(solids[i].o, solids[j].o);
+      const after = deltaEOK(simulateCvd(solids[i].o, type), simulateCvd(solids[j].o, type));
+      if (before >= 0.05 && after < 0.03) out.push(`${solids[i].n} × ${solids[j].n}`);
+    }
+  }
+  return out;
+});
 
 function labelColor(l: number): string {
   return l > 0.6 ? "oklch(0.2 0 0)" : "oklch(0.98 0 0)";
@@ -51,10 +89,40 @@ async function copy(hex: string) {
   </div>
 
   <div class="card">
-    <h2 class="section-title">色板 Scales</h2>
-    <p class="section-sub">
-      每个基色展开为 11 阶 50–950，外加对比度求解出的文字色与 on-solid 前景。点击任意色块复制色值。
-    </p>
+    <div
+      style="
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 14px;
+        flex-wrap: wrap;
+      "
+    >
+      <div>
+        <h2 class="section-title">色板 Scales</h2>
+        <p class="section-sub">
+          每个基色展开为 11 阶 50–950，外加对比度求解出的文字色与 on-solid
+          前景。点击任意色块复制色值。
+        </p>
+      </div>
+      <div class="seg" title="复制格式">
+        <button
+          v-for="f in COPY_FORMATS"
+          :key="f"
+          :class="{ active: copyFormat === f }"
+          @click="copyFormat = f"
+        >
+          {{ f.toUpperCase() }}
+        </button>
+      </div>
+    </div>
+    <div v-if="cvd" class="cvd-note" :class="{ warn: cvdWarnings.length }">
+      <template v-if="cvdWarnings.length">
+        ⚠ 该色觉模拟下，这些语义色可能难以区分：{{ cvdWarnings.join("、") }}
+      </template>
+      <template v-else>✓ 该色觉模拟下，所有语义色仍可区分。</template>
+    </div>
+
     <div class="scale-list">
       <div v-for="name in scaleNames" :key="name" class="scale-row">
         <div class="scale-label">{{ name }}</div>
@@ -64,11 +132,11 @@ async function copy(hex: string) {
             :key="s"
             class="swatch"
             :style="{
-              background: scaleOf(name).steps[s].oklch,
+              background: bgOf(scaleOf(name).steps[s]),
               color: labelColor(scaleOf(name).steps[s].value.l),
             }"
-            :title="`${name}-${s} · 点击复制 ${scaleOf(name).steps[s].hex}`"
-            @click="copy(scaleOf(name).steps[s].hex)"
+            :title="`${name}-${s} · 点击复制 ${valueOf(scaleOf(name).steps[s])}`"
+            @click="copy(valueOf(scaleOf(name).steps[s]))"
           >
             <span class="swatch-step">{{ s }}</span>
             <span class="swatch-hex">{{ scaleOf(name).steps[s].hex.slice(1) }}</span>
@@ -78,39 +146,62 @@ async function copy(hex: string) {
           <button
             class="swatch role"
             :style="{
-              background: scaleOf(name).text.oklch,
+              background: bgOf(scaleOf(name).text),
               color: labelColor(scaleOf(name).text.value.l),
             }"
-            :title="`text · ${scaleOf(name).text.hex}`"
-            @click="copy(scaleOf(name).text.hex)"
+            :title="`text · ${valueOf(scaleOf(name).text)}`"
+            @click="copy(valueOf(scaleOf(name).text))"
           >
             <span class="swatch-step">text</span>
           </button>
           <button
             class="swatch role"
             :style="{
-              background: scaleOf(name).textContrast.oklch,
+              background: bgOf(scaleOf(name).textContrast),
               color: labelColor(scaleOf(name).textContrast.value.l),
             }"
-            :title="`text-contrast · ${scaleOf(name).textContrast.hex}`"
-            @click="copy(scaleOf(name).textContrast.hex)"
+            :title="`text-contrast · ${valueOf(scaleOf(name).textContrast)}`"
+            @click="copy(valueOf(scaleOf(name).textContrast))"
           >
             <span class="swatch-step">text+</span>
           </button>
           <button
             class="swatch role"
             :style="{
-              background: scaleOf(name).steps[500].oklch,
+              background: bgOf(scaleOf(name).steps[500]),
               color: scaleOf(name).onSolid.oklch,
             }"
-            :title="`on-solid · ${scaleOf(name).onSolid.hex}`"
-            @click="copy(scaleOf(name).onSolid.hex)"
+            :title="`on-solid · ${valueOf(scaleOf(name).onSolid)}`"
+            @click="copy(valueOf(scaleOf(name).onSolid))"
           >
             <span class="swatch-step">Aa</span>
           </button>
         </div>
       </div>
     </div>
+  </div>
+
+  <div class="card">
+    <div
+      style="
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 14px;
+        flex-wrap: wrap;
+      "
+    >
+      <div>
+        <h2 class="section-title">色阶诊断 L·C·H</h2>
+        <p class="section-sub">
+          明度应单调下降、彩度中段隆起、色相平缓；折线的突变往往对应浑浊或偏色的台阶。
+        </p>
+      </div>
+      <select v-model="chartScale" style="height: 32px; align-self: center">
+        <option v-for="n in scaleNames" :key="n" :value="n">{{ n }}</option>
+      </select>
+    </div>
+    <RampChart :scale="scaleOf(chartScale)" />
   </div>
 
   <Transition name="toast">
@@ -230,6 +321,20 @@ async function copy(hex: string) {
   letter-spacing: 0.02em;
   opacity: 0.72;
   font-feature-settings: "tnum" 1;
+}
+.cvd-note {
+  font-size: 12.5px;
+  padding: 9px 13px;
+  border-radius: 9px;
+  margin-bottom: 14px;
+  border: 1px solid var(--border);
+  background: var(--muted);
+  color: var(--muted-foreground);
+}
+.cvd-note.warn {
+  border-color: var(--warning, #d97706);
+  background: color-mix(in oklab, var(--warning, #d97706) 12%, transparent);
+  color: var(--foreground);
 }
 .copy-toast {
   position: fixed;

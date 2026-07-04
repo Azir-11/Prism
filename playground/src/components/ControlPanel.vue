@@ -2,7 +2,22 @@
 import type { Form } from "../types";
 import { PRESETS } from "../types";
 
-defineProps<{ form: Form }>();
+const props = defineProps<{ form: Form }>();
+
+// EyeDropper is Chromium-only (2026): feature-detect and hide where unsupported.
+const supportsEyeDropper = typeof window !== "undefined" && "EyeDropper" in window;
+
+async function pickFromScreen() {
+  try {
+    const EyeDropperCtor = (
+      window as unknown as { EyeDropper: new () => { open(): Promise<{ sRGBHex: string }> } }
+    ).EyeDropper;
+    const { sRGBHex } = await new EyeDropperCtor().open();
+    props.form.primary = sRGBHex;
+  } catch {
+    /* user dismissed the eyedropper */
+  }
+}
 </script>
 
 <template>
@@ -35,6 +50,15 @@ defineProps<{ form: Form }>();
         @input="form.primary = ($event.target as HTMLInputElement).value"
       />
       <input type="text" v-model="form.primary" spellcheck="false" />
+      <button
+        v-if="supportsEyeDropper"
+        class="btn"
+        style="padding: 0 10px"
+        title="从屏幕任意位置取色（EyeDropper）"
+        @click="pickFromScreen"
+      >
+        取色
+      </button>
     </div>
     <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px">
       <button

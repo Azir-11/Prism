@@ -9,9 +9,11 @@ export default defineConfig({
   plugins: [vue()],
   resolve: {
     alias: {
-      "@prism/core": src("../packages/core/src/index.ts"),
-      "@prism/css": src("../packages/css/src/index.ts"),
-      "@prism/tailwind": src("../packages/tailwind/src/index.ts"),
+      "@simple-prism/core": src("../packages/core/src/index.ts"),
+      "@simple-prism/css": src("../packages/css/src/index.ts"),
+      "@simple-prism/scss": src("../packages/scss/src/index.ts"),
+      "@simple-prism/tailwind": src("../packages/tailwind/src/index.ts"),
+      "@simple-prism/tokens": src("../packages/tokens/src/index.ts"),
     },
   },
   server: {

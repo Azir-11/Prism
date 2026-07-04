@@ -1,35 +1,48 @@
 <script setup lang="ts">
-import type { PrismInput, PrismTheme } from "@prism/core";
-import { generateTheme, STEP_KEYS } from "@prism/core";
-import { toCssVariables } from "@prism/css";
-import { computed, reactive, ref, shallowRef, watchEffect } from "vue";
+import type { CvdType, PrismInput, PrismTheme } from "@simple-prism/core";
+import { generateTheme, STEP_KEYS } from "@simple-prism/core";
+import { toCssVariables } from "@simple-prism/css";
+import { computed, reactive, ref, shallowRef, watch, watchEffect } from "vue";
 import ContrastView from "./components/ContrastView.vue";
 import ControlPanel from "./components/ControlPanel.vue";
 import ExportView from "./components/ExportView.vue";
 import PaletteView from "./components/PaletteView.vue";
 import PreviewView from "./components/PreviewView.vue";
+import { readInitialForm, saveForm, shareUrl } from "./state";
 import type { Form } from "./types";
+import { DEFAULT_FORM } from "./types";
 
-const form = reactive<Form>({
-  primary: "#3b82f6",
-  useSecondary: false,
-  secondary: "#f43f5e",
-  useTertiary: false,
-  tertiary: "#14b8a6",
-  overrideSemantics: false,
-  info: "#0ea5e9",
-  success: "#22c55e",
-  warning: "#f59e0b",
-  error: "#ef4444",
-  neutralMode: "auto",
-  neutral: "#71717a",
-  neutralChroma: 0.008,
-  textLc: 60,
-  textContrastLc: 90,
-  gamut: "srgb",
-  hueTorsion: 4,
-  appearance: "light",
-});
+const form = reactive<Form>(readInitialForm());
+
+// Persist to localStorage and keep a shareable permalink in the address bar.
+watch(
+  form,
+  () => {
+    saveForm(form);
+    if (typeof history !== "undefined") {
+      history.replaceState(null, "", shareUrl(form));
+    }
+  },
+  { deep: true },
+);
+
+function reset() {
+  Object.assign(form, DEFAULT_FORM);
+}
+
+// Ephemeral accessibility preview mode (not part of the theme / permalink).
+const cvd = ref<CvdType | "off">("off");
+
+const linkCopied = ref(false);
+async function copyLink() {
+  try {
+    await navigator.clipboard.writeText(shareUrl(form));
+  } catch {
+    /* clipboard may be unavailable */
+  }
+  linkCopied.value = true;
+  setTimeout(() => (linkCopied.value = false), 1400);
+}
 
 const theme = shallowRef<PrismTheme | null>(null);
 const error = ref("");
@@ -96,16 +109,31 @@ watchEffect(() => {
           <div class="section-title" style="font-size: 19px">主题预览</div>
           <div class="muted" style="font-size: 12.5px">一个主题色 → 一整套可直接落地的配色。</div>
         </div>
-        <div class="seg">
-          <button
-            :class="{ active: form.appearance === 'light' }"
-            @click="form.appearance = 'light'"
-          >
-            ☀ 亮色
+        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap">
+          <button class="btn" title="复制可分享的永久链接" @click="copyLink">
+            {{ linkCopied ? "链接已复制 ✓" : "🔗 复制链接" }}
           </button>
-          <button :class="{ active: form.appearance === 'dark' }" @click="form.appearance = 'dark'">
-            ☾ 暗色
-          </button>
+          <button class="btn" title="恢复默认设置" @click="reset">↺ 重置</button>
+          <select v-model="cvd" title="色觉模拟（无障碍预览）" style="height: 34px">
+            <option value="off">色觉：正常</option>
+            <option value="protan">红色盲 Protan</option>
+            <option value="deutan">绿色盲 Deutan</option>
+            <option value="tritan">蓝色盲 Tritan</option>
+          </select>
+          <div class="seg">
+            <button
+              :class="{ active: form.appearance === 'light' }"
+              @click="form.appearance = 'light'"
+            >
+              ☀ 亮色
+            </button>
+            <button
+              :class="{ active: form.appearance === 'dark' }"
+              @click="form.appearance = 'dark'"
+            >
+              ☾ 暗色
+            </button>
+          </div>
         </div>
       </div>
 
@@ -148,7 +176,11 @@ watchEffect(() => {
           </div>
         </section>
 
-        <PaletteView :theme="theme" :appearance="form.appearance" />
+        <PaletteView
+          :theme="theme"
+          :appearance="form.appearance"
+          :cvd="cvd === 'off' ? null : cvd"
+        />
         <PreviewView />
         <ContrastView :theme="theme" :appearance="form.appearance" />
         <ExportView :theme="theme" />
