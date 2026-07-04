@@ -1,5 +1,5 @@
 /**
- * @prism/core — generate a harmonious, contrast-aware design-token system from
+ * @simple-prism/core — generate a harmonious, contrast-aware design-token system from
  * one or a few seed colors. OKLCH-first, perceptually even, APCA-solved.
  */
 
@@ -10,9 +10,13 @@ export {
   normalizeOklch,
   clampToGamut,
   formatOklch,
+  formatRgb,
+  formatHsl,
+  formatIn,
   toHex,
   makeSwatch,
   deltaEOK,
+  simulateCvd,
   toSrgb255,
 } from "./color";
 
@@ -22,8 +26,10 @@ export {
   apcaLc,
   apcaContrastRgb,
   solveForLc,
+  solveOnSolid,
   pickOnSolid,
   type SolveOptions,
+  type OnSolidOptions,
 } from "./contrast";
 
 export { chromaBell, nearestStepByLightness, generateScale } from "./scale";

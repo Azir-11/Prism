@@ -1,9 +1,20 @@
-import { clampChroma, converter, differenceEuclidean, formatHex, parse } from "culori";
-import type { ColorInput, Gamut, Oklch, Swatch } from "./types";
+import {
+  clampChroma,
+  converter,
+  differenceEuclidean,
+  filterDeficiencyDeuter,
+  filterDeficiencyProt,
+  filterDeficiencyTrit,
+  formatHex,
+  parse,
+} from "culori";
+import type { Color } from "culori";
+import type { ColorFormat, ColorInput, CvdType, Gamut, Oklch, Swatch } from "./types";
 import { clamp, mod360, round } from "./util";
 
 const toOklch = converter("oklch");
 const toRgb = converter("rgb");
+const toHslMode = converter("hsl");
 const diffOklab = differenceEuclidean("oklab");
 
 /** Parse any CSS color into normalized OKLCH. Throws on unparseable input. */
@@ -53,6 +64,45 @@ export function formatOklch(o: Oklch): string {
   return `oklch(${l} ${c} ${h})`;
 }
 
+/** Format as a modern space-separated CSS `rgb()` string, gamut-mapped to sRGB. */
+export function formatRgb(o: Oklch): string {
+  const [r, g, b] = toSrgb255(o).map((v) => Math.round(v));
+  if (o.alpha != null && o.alpha < 1) {
+    return `rgb(${r} ${g} ${b} / ${round(o.alpha, 3)})`;
+  }
+  return `rgb(${r} ${g} ${b})`;
+}
+
+/** Format as a modern space-separated CSS `hsl()` string, gamut-mapped to sRGB. */
+export function formatHsl(o: Oklch): string {
+  const safe = clampToGamut(o, "srgb");
+  const hsl = toHslMode({ mode: "oklch", l: safe.l, c: safe.c, h: safe.h });
+  const h = round(hsl.h ?? 0, 1);
+  const s = round((hsl.s ?? 0) * 100, 1);
+  const l = round((hsl.l ?? 0) * 100, 1);
+  if (o.alpha != null && o.alpha < 1) {
+    return `hsl(${h} ${s}% ${l}% / ${round(o.alpha, 3)})`;
+  }
+  return `hsl(${h} ${s}% ${l}%)`;
+}
+
+/**
+ * Render an OKLCH value in any supported CSS color format. Used by the adapters
+ * so a single `format` flag drives every emitted value.
+ */
+export function formatIn(o: Oklch, format: ColorFormat): string {
+  switch (format) {
+    case "hex":
+      return toHex(o);
+    case "rgb":
+      return formatRgb(o);
+    case "hsl":
+      return formatHsl(o);
+    default:
+      return formatOklch(o);
+  }
+}
+
 /** sRGB hex (always renderable). */
 export function toHex(o: Oklch): string {
   const safe = clampToGamut(o, "srgb");
@@ -77,6 +127,29 @@ export function deltaEOK(a: Oklch, b: Oklch): number {
     { mode: "oklch", l: a.l, c: a.c, h: a.h },
     { mode: "oklch", l: b.l, c: b.c, h: b.h },
   );
+}
+
+const CVD_FILTERS = {
+  protan: filterDeficiencyProt,
+  deutan: filterDeficiencyDeuter,
+  tritan: filterDeficiencyTrit,
+};
+
+/**
+ * Simulate how a color appears under a color-vision deficiency (Machado 2009,
+ * via culori). `severity` 0..1 scales from unaffected to full dichromacy.
+ * Useful for checking that categorical colors (e.g. success vs error) stay
+ * distinguishable — brightness-based contrast survives CVD, hue separation may not.
+ */
+export function simulateCvd(o: Oklch, type: CvdType, severity = 1): Oklch {
+  const input: Color = { mode: "oklch", l: o.l, c: o.c, h: o.h };
+  const back = toOklch(CVD_FILTERS[type](severity)(input));
+  return normalizeOklch({
+    l: back?.l ?? o.l,
+    c: back?.c ?? 0,
+    h: back?.h ?? 0,
+    alpha: o.alpha,
+  });
 }
 
 /** Convert OKLCH to sRGB byte triplet (0..255), gamut-clamped — for contrast math. */

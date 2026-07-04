@@ -96,6 +96,8 @@ export interface SolveOptions {
   targetLc: number;
   /** Search toward darker text (light bg) or lighter text (dark bg). */
   prefer: "dark" | "light";
+  /** Optional WCAG 2.x ratio the result must also clear (legal-compliance mode). */
+  wcagFloor?: number;
   gamut?: Gamut;
 }
 
@@ -110,7 +112,12 @@ export function solveForLc(opts: SolveOptions): Oklch {
 
   const colorAt = (l: number): Oklch => clampToGamut({ l, c: chromaAt(l), h: hue }, gamut);
 
-  const contrastAt = (l: number) => Math.abs(apcaContrastRgb(toSrgb255(colorAt(l)), toSrgb255(bg)));
+  const passes = (l: number): boolean => {
+    const rgb = toSrgb255(colorAt(l));
+    if (Math.abs(apcaContrastRgb(rgb, toSrgb255(bg))) < targetLc) return false;
+    if (opts.wcagFloor != null && wcagRatioRgb(rgb, toSrgb255(bg)) < opts.wcagFloor) return false;
+    return true;
+  };
 
   let lo: number;
   let hi: number;
@@ -120,7 +127,7 @@ export function solveForLc(opts: SolveOptions): Oklch {
     hi = bg.l;
     for (let i = 0; i < 40; i++) {
       const mid = (lo + hi) / 2;
-      if (contrastAt(mid) >= targetLc) lo = mid;
+      if (passes(mid)) lo = mid;
       else hi = mid;
     }
     return colorAt(lo);
@@ -130,7 +137,7 @@ export function solveForLc(opts: SolveOptions): Oklch {
   hi = 1;
   for (let i = 0; i < 40; i++) {
     const mid = (lo + hi) / 2;
-    if (contrastAt(mid) >= targetLc) hi = mid;
+    if (passes(mid)) hi = mid;
     else lo = mid;
   }
   return colorAt(hi);
@@ -146,4 +153,46 @@ export function pickOnSolid(solid: Oklch, gamut: Gamut = "srgb"): Oklch {
   const lcWhite = Math.abs(apcaLc(white, solid));
   const lcDark = Math.abs(apcaLc(dark, solid));
   return clampToGamut(lcWhite >= lcDark ? white : dark, gamut);
+}
+
+export interface OnSolidOptions {
+  /** APCA |Lc| to aim for on the solid fill (capped by what's achievable). Default 75. */
+  targetLc?: number;
+  gamut?: Gamut;
+}
+
+/**
+ * Solve the best foreground to sit on a solid fill: choose the polarity
+ * (near-white or tinted near-black) that reaches higher APCA contrast, then
+ * drive its lightness to the least-extreme value that still meets `targetLc`.
+ * A real solve — unlike the fixed white-vs-`l:0.22` pick in {@link pickOnSolid} —
+ * so mid-tone solids get a properly contrasting, non-arbitrary foreground.
+ */
+export function solveOnSolid(solid: Oklch, options: OnSolidOptions = {}): Oklch {
+  const target = options.targetLc ?? 75;
+  const gamut = options.gamut ?? "srgb";
+  const darkTint = Math.min(0.05, solid.c * 0.6);
+
+  const fg = (l: number, light: boolean): Oklch =>
+    clampToGamut({ l, c: light ? 0 : darkTint, h: solid.h }, gamut);
+  const contrast = (l: number, light: boolean): number =>
+    Math.abs(apcaContrastRgb(toSrgb255(fg(l, light)), toSrgb255(solid)));
+
+  const light = contrast(1, true) >= contrast(0, false);
+  const reachable = light ? contrast(1, true) : contrast(0, false);
+  if (reachable <= target) return fg(light ? 1 : 0, light);
+
+  // Back off from the extreme toward the solid to the least-extreme passing foreground.
+  let lo = light ? solid.l : 0;
+  let hi = light ? 1 : solid.l;
+  for (let i = 0; i < 40; i++) {
+    const mid = (lo + hi) / 2;
+    const ok = contrast(mid, light) >= target;
+    if (light) {
+      if (ok) hi = mid;
+      else lo = mid;
+    } else if (ok) lo = mid;
+    else hi = mid;
+  }
+  return fg(light ? hi : lo, light);
 }

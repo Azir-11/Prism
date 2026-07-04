@@ -51,4 +51,20 @@ describe("generateScale", () => {
     expect(c500).toBeGreaterThan(scale.steps[50].value.c);
     expect(c500).toBeGreaterThan(scale.steps[950].value.c);
   });
+
+  it("holds hue constant across the ramp when torsion is 0", () => {
+    const scale = generateScale("#3b82f6", { hueTorsion: 0 });
+    const ref = scale.steps[500].value.h;
+    for (const k of STEP_KEYS) {
+      expect(Math.abs(scale.steps[k].value.h - ref)).toBeLessThan(1);
+    }
+  });
+
+  it("torsions hue so the dark and light ends of the ramp diverge", () => {
+    const scale = generateScale("#3b82f6", { hueTorsion: 10, appearance: "light" });
+    const hLight = scale.steps[50].value.h; // highest lightness
+    const hDark = scale.steps[950].value.h; // lowest lightness
+    // Positive torsion pushes the dark end's hue above the light end's.
+    expect(hDark).toBeGreaterThan(hLight + 2);
+  });
 });

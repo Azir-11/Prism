@@ -11,7 +11,7 @@ import {
   SOLID_STEP,
 } from "./constants";
 import { clampToGamut, makeSwatch, normalizeOklch, parseColor } from "./color";
-import { pickOnSolid, solveForLc } from "./contrast";
+import { solveForLc, solveOnSolid } from "./contrast";
 import { clamp } from "./util";
 
 /**
@@ -94,7 +94,7 @@ export function generateScale(seedInput: ColorInput | Oklch, opts: ScaleOptions 
     solveForLc({ hue: seed.h, chromaAt, bg, targetLc: textContrastLc, prefer, gamut }),
     gamut,
   );
-  const onSolid = makeSwatch(pickOnSolid(steps[SOLID_STEP].value, gamut), gamut);
+  const onSolid = makeSwatch(solveOnSolid(steps[SOLID_STEP].value, { gamut }), gamut);
 
   return {
     name: opts.name ?? "color",

@@ -16,6 +16,12 @@ export interface Oklch {
 export type Appearance = "light" | "dark";
 export type Gamut = "srgb" | "p3";
 
+/** Output color notation an adapter can emit a value in. */
+export type ColorFormat = "oklch" | "hex" | "rgb" | "hsl";
+
+/** A color-vision deficiency Prism can simulate for accessibility previews. */
+export type CvdType = "protan" | "deutan" | "tritan";
+
 /** The 11 numbered steps of a Prism scale (Tailwind numbering). */
 export const STEP_KEYS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950] as const;
 export type StepKey = (typeof STEP_KEYS)[number];
