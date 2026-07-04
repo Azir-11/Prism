@@ -9,25 +9,25 @@ title: 快速上手
 ::: code-group
 
 ```bash [pnpm]
-pnpm add @prism/core @prism/css
+pnpm add @simple-prism/core @simple-prism/css
 ```
 
 ```bash [npm]
-npm i @prism/core @prism/css
+npm i @simple-prism/core @simple-prism/css
 ```
 
 ```bash [yarn]
-yarn add @prism/core @prism/css
+yarn add @simple-prism/core @simple-prism/css
 ```
 
 :::
 
-`@prism/core` 是引擎，`@prism/css` 是 CSS 变量适配器。需要 Tailwind 输出再加 `@prism/tailwind`。
+`@simple-prism/core` 是引擎，`@simple-prism/css` 是 CSS 变量适配器。需要 Tailwind 输出再加 `@simple-prism/tailwind`。
 
 ## 生成一套主题
 
 ```ts
-import { generateTheme } from "@prism/core";
+import { generateTheme } from "@simple-prism/core";
 
 const theme = generateTheme({ primary: "#3b82f6" });
 
@@ -41,7 +41,7 @@ theme.report.passes; // true —— 所有文字配对均达到 APCA 目标
 ## 输出为 CSS 变量
 
 ```ts
-import { toCssVariables } from "@prism/css";
+import { toCssVariables } from "@simple-prism/css";
 
 const css = toCssVariables(theme);
 // :root {
@@ -81,7 +81,7 @@ document.head.append(Object.assign(document.createElement("style"), { textConten
 ## 输出为 Tailwind v4
 
 ```ts
-import { toTailwindCss } from "@prism/tailwind";
+import { toTailwindCss } from "@simple-prism/tailwind";
 
 const css = toTailwindCss(theme);
 // @theme {

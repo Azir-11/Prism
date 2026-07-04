@@ -1,9 +1,23 @@
 {
-  "name": "@prism/css",
+  "name": "@simple-prism/css",
   "version": "0.1.0",
   "description": "CSS custom-properties adapter for Prism themes (:root + .dark).",
+  "keywords": [
+    "color",
+    "css-variables",
+    "design-tokens",
+    "oklch",
+    "theme"
+  ],
+  "homepage": "https://github.com/Azir-11/Prism#readme",
+  "bugs": "https://github.com/Azir-11/Prism/issues",
   "license": "MIT",
   "author": "青菜白玉汤",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Azir-11/Prism.git",
+    "directory": "packages/css"
+  },
   "files": [
     "dist"
   ],
@@ -24,12 +38,15 @@
       }
     }
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsdown",
     "dev": "tsdown --watch",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@prism/core": "workspace:*"
+    "@simple-prism/core": "workspace:*"
   }
 }

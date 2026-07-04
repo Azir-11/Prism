@@ -11,9 +11,9 @@
     "noEmit": true,
     "types": ["vite/client"],
     "paths": {
-      "@prism/core": ["../packages/core/src/index.ts"],
-      "@prism/css": ["../packages/css/src/index.ts"],
-      "@prism/tailwind": ["../packages/tailwind/src/index.ts"]
+      "@simple-prism/core": ["../packages/core/src/index.ts"],
+      "@simple-prism/css": ["../packages/css/src/index.ts"],
+      "@simple-prism/tailwind": ["../packages/tailwind/src/index.ts"]
     }
   },
   "include": ["src", "vite.config.ts", "env.d.ts"]

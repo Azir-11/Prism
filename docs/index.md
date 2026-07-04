@@ -45,8 +45,8 @@ features:
 <PrismPalette color="#6366f1" />
 
 ```ts
-import { generateTheme } from "@prism/core";
-import { toCssVariables } from "@prism/css";
+import { generateTheme } from "@simple-prism/core";
+import { toCssVariables } from "@simple-prism/css";
 
 const theme = generateTheme({ primary: "#6366f1" });
 document.head.append(

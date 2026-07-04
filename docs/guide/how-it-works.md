@@ -42,7 +42,7 @@ title: 生成逻辑
 任何 CSS 颜色（hex、`rgb()`、`hsl()`、`oklch()`…）先被解析成 [OKLCH](/guide/oklch) —— 一个**感知均匀**的色彩空间。之后所有计算都在这里进行，这是"等量变化看起来也等量"的前提。
 
 ```ts
-import { parseColor } from "@prism/core";
+import { parseColor } from "@simple-prism/core";
 parseColor("#3b82f6"); // → { l: 0.623, c: 0.214, h: 259.8 }
 ```
 
@@ -90,7 +90,7 @@ theme.report.passes; // true：所有文字配对均达到 APCA 目标
 theme.report.checks; // 每一对前景/背景的 APCA Lc 与 WCAG 比值
 ```
 
-到这里，你手上就是一套 `scales`（数字色阶）+ `semantic`（语义令牌）+ `report`（体检报告）的完整主题，可直接交给 [@prism/css](/api/css) 或 [@prism/tailwind](/api/tailwind) 落地。
+到这里，你手上就是一套 `scales`（数字色阶）+ `semantic`（语义令牌）+ `report`（体检报告）的完整主题，可直接交给 [@simple-prism/css](/api/css) 或 [@simple-prism/tailwind](/api/tailwind) 落地。
 
 ::: tip 想直接看效果？
 打开仓库里的 **playground**（`pnpm play`），输入颜色就能实时看到上面每一步的产物：完整色板、组件预览和对比度报告。

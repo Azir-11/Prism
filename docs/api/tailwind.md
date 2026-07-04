@@ -1,8 +1,8 @@
 ---
-title: "@prism/tailwind"
+title: "@simple-prism/tailwind"
 ---
 
-# @prism/tailwind
+# @simple-prism/tailwind
 
 把 `PrismTheme` 渲染为 Tailwind CSS v4 的 `@theme` 块。
 
@@ -15,8 +15,8 @@ function toTailwindCss(theme: PrismTheme, options?: TailwindOptions): string;
 产出一个 `@theme` 块（亮色）外加一个 `.dark` 覆盖块，二者重定义同一批 `--color-*` 变量。于是 `bg-primary-500`、`text-foreground`、`border-border` 等工具类在明暗两种模式下都生效。
 
 ```ts
-import { generateTheme } from "@prism/core";
-import { toTailwindCss } from "@prism/tailwind";
+import { generateTheme } from "@simple-prism/core";
+import { toTailwindCss } from "@simple-prism/tailwind";
 
 const css = toTailwindCss(generateTheme({ primary: "#3b82f6" }));
 ```

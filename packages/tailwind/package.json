@@ -1,9 +1,24 @@
 {
-  "name": "@prism/tailwind",
+  "name": "@simple-prism/tailwind",
   "version": "0.1.0",
   "description": "Tailwind CSS v4 @theme adapter for Prism themes.",
+  "keywords": [
+    "color",
+    "design-tokens",
+    "oklch",
+    "tailwind",
+    "tailwindcss",
+    "theme"
+  ],
+  "homepage": "https://github.com/Azir-11/Prism#readme",
+  "bugs": "https://github.com/Azir-11/Prism/issues",
   "license": "MIT",
   "author": "青菜白玉汤",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Azir-11/Prism.git",
+    "directory": "packages/tailwind"
+  },
   "files": [
     "dist"
   ],
@@ -24,12 +39,15 @@
       }
     }
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsdown",
     "dev": "tsdown --watch",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@prism/core": "workspace:*"
+    "@simple-prism/core": "workspace:*"
   }
 }

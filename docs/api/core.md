@@ -1,8 +1,8 @@
 ---
-title: "@prism/core"
+title: "@simple-prism/core"
 ---
 
-# @prism/core
+# @simple-prism/core
 
 引擎包。负责颜色科学与令牌生成，唯一运行时依赖是 [culori](https://culorijs.org/)。
 

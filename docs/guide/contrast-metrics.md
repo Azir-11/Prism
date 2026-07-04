@@ -88,7 +88,7 @@ theme.report.checks[0];
 也可以对任意主题随时复检：
 
 ```ts
-import { verifyContrast } from "@prism/core";
+import { verifyContrast } from "@simple-prism/core";
 const report = verifyContrast(theme);
 ```
 

@@ -16,10 +16,10 @@
     "format": "oxfmt .",
     "format:check": "oxfmt --check .",
     "check": "pnpm lint && pnpm format:check && pnpm test",
-    "play": "pnpm --filter @prism/playground dev",
-    "play:build": "pnpm --filter @prism/playground build",
-    "docs:dev": "pnpm --filter @prism/docs docs:dev",
-    "docs:build": "pnpm --filter @prism/docs docs:build"
+    "play": "pnpm --filter @simple-prism/playground dev",
+    "play:build": "pnpm --filter @simple-prism/playground build",
+    "docs:dev": "pnpm --filter @simple-prism/docs docs:dev",
+    "docs:build": "pnpm --filter @simple-prism/docs docs:build"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",

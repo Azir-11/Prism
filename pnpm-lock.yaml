@@ -35,13 +35,13 @@ importers:
       '@fontsource-variable/plus-jakarta-sans':
         specifier: ^5.2.8
         version: 5.2.8
-      '@prism/core':
+      '@simple-prism/core':
         specifier: workspace:*
         version: link:../packages/core
-      '@prism/css':
+      '@simple-prism/css':
         specifier: workspace:*
         version: link:../packages/css
-      '@prism/tailwind':
+      '@simple-prism/tailwind':
         specifier: workspace:*
         version: link:../packages/tailwind
       vitepress:
@@ -63,13 +63,25 @@ importers:
 
   packages/css:
     dependencies:
-      '@prism/core':
+      '@simple-prism/core':
+        specifier: workspace:*
+        version: link:../core
+
+  packages/scss:
+    dependencies:
+      '@simple-prism/core':
         specifier: workspace:*
         version: link:../core
 
   packages/tailwind:
     dependencies:
-      '@prism/core':
+      '@simple-prism/core':
+        specifier: workspace:*
+        version: link:../core
+
+  packages/tokens:
+    dependencies:
+      '@simple-prism/core':
         specifier: workspace:*
         version: link:../core
 
@@ -81,15 +93,21 @@ importers:
       '@fontsource-variable/plus-jakarta-sans':
         specifier: ^5.2.8
         version: 5.2.8
-      '@prism/core':
+      '@simple-prism/core':
         specifier: workspace:*
         version: link:../packages/core
-      '@prism/css':
+      '@simple-prism/css':
         specifier: workspace:*
         version: link:../packages/css
-      '@prism/tailwind':
+      '@simple-prism/scss':
+        specifier: workspace:*
+        version: link:../packages/scss
+      '@simple-prism/tailwind':
         specifier: workspace:*
         version: link:../packages/tailwind
+      '@simple-prism/tokens':
+        specifier: workspace:*
+        version: link:../packages/tokens
       vue:
         specifier: ^3.5.39
         version: 3.5.39(typescript@6.0.3)

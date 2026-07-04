@@ -11,8 +11,8 @@ Prism 让你只挑一个喜欢的主题色，就自动配好一整套**协调、
 - **核心 + 适配器** —— 引擎只产出颜色，落地交给适配器。
 
 ```ts
-import { generateTheme } from "@prism/core";
-import { toCssVariables } from "@prism/css";
+import { generateTheme } from "@simple-prism/core";
+import { toCssVariables } from "@simple-prism/css";
 
 const theme = generateTheme({ primary: "#3b82f6" });
 const css = toCssVariables(theme); // :root { … } + .dark { … }
@@ -22,20 +22,24 @@ const css = toCssVariables(theme); // :root { … } + .dark { … }
 
 ```
 packages/
-  core/        @prism/core      颜色科学与令牌生成（唯一依赖 culori）
-  css/         @prism/css       CSS 变量适配器
-  tailwind/    @prism/tailwind  Tailwind v4 @theme 适配器
+  core/        @simple-prism/core      颜色科学与令牌生成（唯一依赖 culori）
+  css/         @simple-prism/css       CSS 变量适配器
+  tailwind/    @simple-prism/tailwind  Tailwind v4 @theme 适配器
+  scss/        @simple-prism/scss      Sass/SCSS 变量 + map 适配器
+  tokens/      @simple-prism/tokens    W3C/DTCG 设计令牌适配器
 playground/    Vite + Vue 3.5   输入颜色 → 实时色板 / 组件预览 / 导出
 docs/          VitePress 2      中文文档（含色彩美学理念）
 ```
 
 ## 包一览
 
-| 包                | 作用        | 入口                                               |
-| ----------------- | ----------- | -------------------------------------------------- |
-| `@prism/core`     | 生成引擎    | `generateTheme`、`generateScale`、调和与对比度工具 |
-| `@prism/css`      | CSS 变量    | `toCssVariables`、`toCssVariableMap`               |
-| `@prism/tailwind` | Tailwind v4 | `toTailwindCss`、`toTailwindColors`                |
+| 包                       | 作用        | 入口                                               |
+| ------------------------ | ----------- | -------------------------------------------------- |
+| `@simple-prism/core`     | 生成引擎    | `generateTheme`、`generateScale`、调和与对比度工具 |
+| `@simple-prism/css`      | CSS 变量    | `toCssVariables`、`toCssVariableMap`               |
+| `@simple-prism/tailwind` | Tailwind v4 | `toTailwindCss`、`toTailwindColors`                |
+| `@simple-prism/scss`     | Sass/SCSS   | `toScss`                                           |
+| `@simple-prism/tokens`   | W3C/DTCG    | `toDesignTokens`、`toDesignTokensJson`             |
 
 ## 开发
 

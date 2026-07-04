@@ -25,7 +25,7 @@ title: 色阶与角色合约
 500 是整条色阶的心脏——**solid 锚点**,也就是按钮填充、品牌强调最常落地的那一级。其余台阶围绕它,在背景、边框、文字三大职能间各司其职。
 
 ```ts
-import { generateScale, toHex } from "@prism/core";
+import { generateScale, toHex } from "@simple-prism/core";
 
 const scale = generateScale("#3b5bdb", {});
 console.log(toHex(scale["50"])); // 应用背景
@@ -44,7 +44,7 @@ console.log(toHex(scale["950"])); // 强文字
 `text` 与 `textContrast` 由 `solveForLc` 以 APCA 为目标二分求解,`onSolid` 则按 APCA 量级在白色与带色调的近黑之间择优。无论品牌色是什么色相,这三个别名都被解到位(原理详见 [对比度](./contrast.md))。
 
 ```ts
-import { generateScale, toHex } from "@prism/core";
+import { generateScale, toHex } from "@simple-prism/core";
 
 const s = generateScale("#3b5bdb", {});
 console.log(toHex(s.text)); // 正文文字,APCA 已达标
@@ -63,7 +63,7 @@ console.log(toHex(s.onSolid)); // 叠在 500 上的前景
 Prism 的彩度沿一条**钟形曲线**分布:在 L≈0.62 附近达到峰值,向白端**急剧**收敛、向黑端**平缓**收敛。更关键的是,**钟峰的高度是从种子色自身的彩度缩放出来的**——你给一个素净的品牌色,得到的是素净的色阶;你给一个明艳的品牌色,得到的是明艳的色阶。色阶忠实于你的选择,而不是强加一种鲜艳度。
 
 ```ts
-import { generateScale } from "@prism/core";
+import { generateScale } from "@simple-prism/core";
 
 const muted = generateScale("#64748b", {}); // 素净种子 → 素净色阶
 const vivid = generateScale("#f50057", {}); // 明艳种子 → 明艳色阶
@@ -74,7 +74,7 @@ const vivid = generateScale("#f50057", {}); // 明艳种子 → 明艳色阶
 让色相在整条阶上严格恒定,两端反而会显得"死"和"浊"。Prism 故意引入几度的**色相扭转**(hue torsion,默认 4°)——让色相沿明度阶轻轻漂移,使暗端和亮端重新焕发生气。它是可配置的:
 
 ```ts
-import { generateScale } from "@prism/core";
+import { generateScale } from "@simple-prism/core";
 
 const s = generateScale("#3b5bdb", { hueTorsion: 6 }); // 加大扭转
 ```

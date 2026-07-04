@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { generateTheme } from "@prism/core";
+import { generateTheme } from "@simple-prism/core";
 import { computed, ref } from "vue";
 
 const props = withDefaults(defineProps<{ color?: string; name?: string; editable?: boolean }>(), {

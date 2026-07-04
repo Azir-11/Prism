@@ -31,8 +31,8 @@ Prism 就是为这种情况做的：**你只挑一个喜欢的主题色，它替
 ## 怎么用
 
 ```ts
-import { generateTheme } from "@prism/core";
-import { toCssVariables } from "@prism/css";
+import { generateTheme } from "@simple-prism/core";
+import { toCssVariables } from "@simple-prism/css";
 
 const theme = generateTheme({ primary: "#3b82f6" });
 const css = toCssVariables(theme); // 直接注入页面即可
@@ -43,9 +43,9 @@ const css = toCssVariables(theme); // 直接注入页面即可
 ## 它是怎么组织的
 
 ```
-@prism/core        颜色计算与令牌生成（唯一依赖 culori）
-   ├── @prism/css        → :root { … } + .dark { … }
-   └── @prism/tailwind   → @theme { … } + .dark 覆盖
+@simple-prism/core        颜色计算与令牌生成（唯一依赖 culori）
+   ├── @simple-prism/css        → :root { … } + .dark { … }
+   └── @simple-prism/tailwind   → @theme { … } + .dark 覆盖
 ```
 
 引擎只负责"算颜色"，不关心输出成什么格式；适配器只负责"把结果翻译成 CSS / Tailwind / JSON"。所以无论你的项目用什么技术栈，接进来都很轻；要支持新的格式，再写一个适配器即可。

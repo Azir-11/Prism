@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Appearance, PrismTheme } from "@prism/core";
+import type { Appearance, PrismTheme } from "@simple-prism/core";
 import { computed } from "vue";
 import InfoDot from "./InfoDot.vue";
 
