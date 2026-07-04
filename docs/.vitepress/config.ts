@@ -46,14 +46,23 @@ export default defineConfig({
             { text: "暗色模式", link: "/guide/dark-mode" },
           ],
         },
+        {
+          text: "落地实践",
+          items: [
+            { text: "SSR 无闪暗色", link: "/guide/recipes-ssr" },
+            { text: "无缝接入 shadcn/ui", link: "/guide/recipes-shadcn" },
+          ],
+        },
       ],
       "/api/": [
         {
           text: "API 参考",
           items: [
-            { text: "@prism/core", link: "/api/core" },
-            { text: "@prism/css", link: "/api/css" },
-            { text: "@prism/tailwind", link: "/api/tailwind" },
+            { text: "@simple-prism/core", link: "/api/core" },
+            { text: "@simple-prism/css", link: "/api/css" },
+            { text: "@simple-prism/tailwind", link: "/api/tailwind" },
+            { text: "@simple-prism/scss", link: "/api/scss" },
+            { text: "@simple-prism/tokens", link: "/api/tokens" },
           ],
         },
       ],
@@ -72,9 +81,11 @@ export default defineConfig({
   vite: {
     resolve: {
       alias: {
-        "@prism/core": src("../../packages/core/src/index.ts"),
-        "@prism/css": src("../../packages/css/src/index.ts"),
-        "@prism/tailwind": src("../../packages/tailwind/src/index.ts"),
+        "@simple-prism/core": src("../../packages/core/src/index.ts"),
+        "@simple-prism/css": src("../../packages/css/src/index.ts"),
+        "@simple-prism/scss": src("../../packages/scss/src/index.ts"),
+        "@simple-prism/tailwind": src("../../packages/tailwind/src/index.ts"),
+        "@simple-prism/tokens": src("../../packages/tokens/src/index.ts"),
       },
     },
   },

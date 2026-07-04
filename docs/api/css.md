@@ -1,10 +1,10 @@
 ---
-title: "@prism/css"
+title: "@simple-prism/css"
 ---
 
-# @prism/css
+# @simple-prism/css
 
-把 `PrismTheme` 渲染为 CSS 自定义属性。纯函数，零运行时依赖（仅类型依赖 `@prism/core`）。
+把 `PrismTheme` 渲染为 CSS 自定义属性。纯函数，零运行时依赖（仅类型依赖 `@simple-prism/core`）。
 
 ## toCssVariables
 
@@ -15,8 +15,8 @@ function toCssVariables(theme: PrismTheme, options?: CssOptions): string;
 产出 `:root`（亮色）与 `.dark`（暗色）两个块。**色阶变量按外观分别写出；语义层只在亮色块里以 `var()` 引用写一次** —— 因此 `.dark` 块只需重定义底层色阶变量，整套主题即可翻转。
 
 ```ts
-import { generateTheme } from "@prism/core";
-import { toCssVariables } from "@prism/css";
+import { generateTheme } from "@simple-prism/core";
+import { toCssVariables } from "@simple-prism/css";
 
 const css = toCssVariables(generateTheme({ primary: "#3b82f6" }));
 ```
@@ -50,14 +50,14 @@ const css = toCssVariables(generateTheme({ primary: "#3b82f6" }));
 
 ### CssOptions
 
-| 选项           | 类型               | 默认      | 说明             |
-| -------------- | ------------------ | --------- | ---------------- |
-| `prefix`       | `string`           | `'prism'` | 色阶变量前缀。   |
-| `rootSelector` | `string`           | `':root'` | 亮色块选择器。   |
-| `darkSelector` | `string`           | `'.dark'` | 暗色块选择器。   |
-| `semantic`     | `boolean`          | `true`    | 是否输出语义层。 |
-| `format`       | `'oklch' \| 'hex'` | `'oklch'` | 取值格式。       |
-| `indent`       | `string`           | `'  '`    | 缩进。           |
+| 选项           | 类型                                 | 默认      | 说明             |
+| -------------- | ------------------------------------ | --------- | ---------------- |
+| `prefix`       | `string`                             | `'prism'` | 色阶变量前缀。   |
+| `rootSelector` | `string`                             | `':root'` | 亮色块选择器。   |
+| `darkSelector` | `string`                             | `'.dark'` | 暗色块选择器。   |
+| `semantic`     | `boolean`                            | `true`    | 是否输出语义层。 |
+| `format`       | `'oklch' \| 'hex' \| 'rgb' \| 'hsl'` | `'oklch'` | 取值格式。       |
+| `indent`       | `string`                             | `'  '`    | 缩进。           |
 
 ## toCssVariableMap
 
