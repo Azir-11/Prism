@@ -1,5 +1,12 @@
-import type { Appearance, PrismTheme, Scale, SemanticRef, Swatch } from "@prism/core";
-import { STEP_KEYS } from "@prism/core";
+import type {
+  Appearance,
+  ColorFormat,
+  PrismTheme,
+  Scale,
+  SemanticRef,
+  Swatch,
+} from "@simple-prism/core";
+import { formatHsl, formatRgb, STEP_KEYS } from "@simple-prism/core";
 
 export interface CssOptions {
   /** Variable name prefix for scale steps. Default `prism`. */
@@ -11,13 +18,22 @@ export interface CssOptions {
   /** Emit the shadcn-style semantic token layer. Default `true`. */
   semantic?: boolean;
   /** Value format. Default `oklch`. */
-  format?: "oklch" | "hex";
+  format?: ColorFormat;
   /** Indentation. Default two spaces. */
   indent?: string;
 }
 
-function value(swatch: Swatch, format: "oklch" | "hex"): string {
-  return format === "hex" ? swatch.hex : swatch.oklch;
+function value(swatch: Swatch, format: ColorFormat): string {
+  switch (format) {
+    case "hex":
+      return swatch.hex;
+    case "rgb":
+      return formatRgb(swatch.value);
+    case "hsl":
+      return formatHsl(swatch.value);
+    default:
+      return swatch.oklch;
+  }
 }
 
 function refToVar(prefix: string, ref: SemanticRef): string {
@@ -36,7 +52,7 @@ function scaleLines(
   scale: Scale,
   prefix: string,
   name: string,
-  format: "oklch" | "hex",
+  format: ColorFormat,
   indent: string,
 ): string[] {
   const lines: string[] = [];

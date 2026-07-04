@@ -1,5 +1,5 @@
-import type { Appearance, PrismTheme, Scale } from "@prism/core";
-import { resolveSemantic, STEP_KEYS } from "@prism/core";
+import type { Appearance, ColorFormat, PrismTheme, Scale, Swatch } from "@simple-prism/core";
+import { formatHsl, formatRgb, resolveSemantic, STEP_KEYS } from "@simple-prism/core";
 
 export interface TailwindOptions {
   /** Selector used to redefine tokens for dark mode. Default `.dark`. */
@@ -7,15 +7,24 @@ export interface TailwindOptions {
   /** Include the semantic single-color aliases (background, primary, …). Default `true`. */
   semantic?: boolean;
   /** Value format. Default `oklch`. */
-  format?: "oklch" | "hex";
+  format?: ColorFormat;
   indent?: string;
 }
 
-function val(scaleSwatch: { hex: string; oklch: string }, format: "oklch" | "hex"): string {
-  return format === "hex" ? scaleSwatch.hex : scaleSwatch.oklch;
+function val(swatch: Swatch, format: ColorFormat): string {
+  switch (format) {
+    case "hex":
+      return swatch.hex;
+    case "rgb":
+      return formatRgb(swatch.value);
+    case "hsl":
+      return formatHsl(swatch.value);
+    default:
+      return swatch.oklch;
+  }
 }
 
-function scaleLines(scale: Scale, name: string, format: "oklch" | "hex", indent: string): string[] {
+function scaleLines(scale: Scale, name: string, format: ColorFormat, indent: string): string[] {
   return STEP_KEYS.map(
     (key) => `${indent}--color-${name}-${key}: ${val(scale.steps[key], format)};`,
   );
@@ -24,7 +33,7 @@ function scaleLines(scale: Scale, name: string, format: "oklch" | "hex", indent:
 function semanticLines(
   theme: PrismTheme,
   appearance: Appearance,
-  format: "oklch" | "hex",
+  format: ColorFormat,
   indent: string,
 ): string[] {
   return Object.keys(theme.semantic).map((token) => {
@@ -75,7 +84,7 @@ export function toTailwindCss(theme: PrismTheme, options: TailwindOptions = {}):
 export function toTailwindColors(
   theme: PrismTheme,
   appearance: Appearance = "light",
-  format: "oklch" | "hex" = "hex",
+  format: ColorFormat = "hex",
 ): Record<string, Record<string, string>> {
   const out: Record<string, Record<string, string>> = {};
   for (const [name, pair] of Object.entries(theme.scales)) {

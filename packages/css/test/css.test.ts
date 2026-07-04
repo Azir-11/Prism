@@ -1,4 +1,4 @@
-import { generateTheme } from "@prism/core";
+import { generateTheme } from "@simple-prism/core";
 import { describe, expect, it } from "vitest";
 import { toCssVariableMap, toCssVariables } from "../src/index";
 
@@ -22,6 +22,11 @@ describe("toCssVariables", () => {
   it("supports hex output", () => {
     const hex = toCssVariables(theme, { format: "hex" });
     expect(hex).toMatch(/--prism-primary-500: #[0-9a-f]{6}/i);
+  });
+
+  it("supports rgb and hsl output", () => {
+    expect(toCssVariables(theme, { format: "rgb" })).toMatch(/--prism-primary-500: rgb\(\d/);
+    expect(toCssVariables(theme, { format: "hsl" })).toMatch(/--prism-primary-500: hsl\(\d/);
   });
 });
 

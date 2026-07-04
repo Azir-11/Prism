@@ -1,4 +1,4 @@
-import { generateTheme } from "@prism/core";
+import { generateTheme } from "@simple-prism/core";
 import { describe, expect, it } from "vitest";
 import { toTailwindColors, toTailwindCss } from "../src/index";
 
@@ -16,6 +16,11 @@ describe("toTailwindCss", () => {
     expect(css).toContain(".dark {");
     expect(css).toContain("--color-background:");
     expect(css).toContain("--color-primary-foreground:");
+  });
+
+  it("supports rgb and hsl output", () => {
+    expect(toTailwindCss(theme, { format: "rgb" })).toMatch(/--color-primary-500: rgb\(\d/);
+    expect(toTailwindCss(theme, { format: "hsl" })).toMatch(/--color-primary-500: hsl\(\d/);
   });
 });
 
