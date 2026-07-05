@@ -1,6 +1,6 @@
 {
   "name": "@simple-prism/tailwind",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Tailwind CSS v4 @theme adapter for Prism themes.",
   "keywords": [
     "color",

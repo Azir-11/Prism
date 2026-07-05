@@ -1,6 +1,6 @@
 {
   "name": "@simple-prism/core",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Generate a harmonious, contrast-aware design-token system from one or a few seed colors.",
   "keywords": [
     "accessibility",
