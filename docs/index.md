@@ -12,6 +12,9 @@ hero:
       text: 快速上手
       link: /guide/getting-started
     - theme: alt
+      text: 🎨 在线体验
+      link: https://prism-playground.vercel.app/
+    - theme: alt
       text: 它是怎么做到的
       link: /guide/how-it-works
     - theme: alt

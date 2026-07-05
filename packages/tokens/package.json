@@ -1,6 +1,6 @@
 {
   "name": "@simple-prism/tokens",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "W3C/DTCG design-tokens JSON adapter for Prism themes (Style Dictionary / Tokens Studio ready).",
   "keywords": [
     "color",
@@ -10,7 +10,7 @@
     "tokens-studio",
     "w3c"
   ],
-  "homepage": "https://github.com/Azir-11/Prism#readme",
+  "homepage": "https://prism-docs-gamma.vercel.app/api/tokens",
   "bugs": "https://github.com/Azir-11/Prism/issues",
   "license": "MIT",
   "author": "青菜白玉汤",

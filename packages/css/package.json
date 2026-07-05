@@ -1,6 +1,6 @@
 {
   "name": "@simple-prism/css",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "CSS custom-properties adapter for Prism themes (:root + .dark).",
   "keywords": [
     "color",
@@ -9,7 +9,7 @@
     "oklch",
     "theme"
   ],
-  "homepage": "https://github.com/Azir-11/Prism#readme",
+  "homepage": "https://prism-docs-gamma.vercel.app/api/css",
   "bugs": "https://github.com/Azir-11/Prism/issues",
   "license": "MIT",
   "author": "青菜白玉汤",

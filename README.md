@@ -2,6 +2,11 @@
 
 > 没有设计师，也能配出好看的主题。
 
+**[📖 文档](https://prism-docs-gamma.vercel.app/)** · **[🎨 在线体验 Playground](https://prism-playground.vercel.app/)** · **[📦 npm](https://www.npmjs.com/package/@simple-prism/core)**
+
+[![npm](https://img.shields.io/npm/v/@simple-prism/core?color=cb3837&logo=npm&label=%40simple-prism%2Fcore)](https://www.npmjs.com/package/@simple-prism/core)
+[![license](https://img.shields.io/badge/license-MIT-blue)](./LICENSE)
+
 Prism 让你只挑一个喜欢的主题色，就自动配好一整套**协调、可读、明暗双全**的颜色 —— 完整的深浅色阶、次色与语义色、中性色、对比度体检，以及可直接落地的 CSS 变量、Tailwind `@theme` 或 JSON。专为没有专业设计师的团队与开发者而做。
 
 - **OKLCH-first** —— 全程在感知均匀的色彩空间生成，色阶看起来就是均匀的。
@@ -33,13 +38,13 @@ docs/          VitePress 2      中文文档（含色彩美学理念）
 
 ## 包一览
 
-| 包                       | 作用        | 入口                                               |
-| ------------------------ | ----------- | -------------------------------------------------- |
-| `@simple-prism/core`     | 生成引擎    | `generateTheme`、`generateScale`、调和与对比度工具 |
-| `@simple-prism/css`      | CSS 变量    | `toCssVariables`、`toCssVariableMap`               |
-| `@simple-prism/tailwind` | Tailwind v4 | `toTailwindCss`、`toTailwindColors`                |
-| `@simple-prism/scss`     | Sass/SCSS   | `toScss`                                           |
-| `@simple-prism/tokens`   | W3C/DTCG    | `toDesignTokens`、`toDesignTokensJson`             |
+| 包                                                                               | 作用        | 入口                                               |
+| -------------------------------------------------------------------------------- | ----------- | -------------------------------------------------- |
+| [`@simple-prism/core`](https://www.npmjs.com/package/@simple-prism/core)         | 生成引擎    | `generateTheme`、`generateScale`、调和与对比度工具 |
+| [`@simple-prism/css`](https://www.npmjs.com/package/@simple-prism/css)           | CSS 变量    | `toCssVariables`、`toCssVariableMap`               |
+| [`@simple-prism/tailwind`](https://www.npmjs.com/package/@simple-prism/tailwind) | Tailwind v4 | `toTailwindCss`、`toTailwindColors`                |
+| [`@simple-prism/scss`](https://www.npmjs.com/package/@simple-prism/scss)         | Sass/SCSS   | `toScss`                                           |
+| [`@simple-prism/tokens`](https://www.npmjs.com/package/@simple-prism/tokens)     | W3C/DTCG    | `toDesignTokens`、`toDesignTokensJson`             |
 
 ## 开发
 
@@ -68,7 +73,7 @@ Prism 综合了 Tailwind、Radix、Ant Design、Arco、TDesign、shadcn 与 Mate
 - **暗色**：镜像明度阶 + 中间调彩度补偿（亥姆霍兹–科尔劳什效应）；
 - **对比度**：以 APCA 为生成目标，WCAG 2.x 作为合规报告。
 
-详见[文档站](./docs)的"色彩美学"系列。
+详见[文档站](https://prism-docs-gamma.vercel.app/)的"色彩美学"系列。
 
 ## License
 

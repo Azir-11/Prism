@@ -3,8 +3,14 @@
   "version": "0.0.0",
   "private": true,
   "description": "Prism — generate a harmonious, contrast-aware design-token system from one or a few seed colors.",
+  "homepage": "https://prism-docs-gamma.vercel.app/",
+  "bugs": "https://github.com/Azir-11/Prism/issues",
   "license": "MIT",
   "author": "青菜白玉汤",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Azir-11/Prism.git"
+  },
   "type": "module",
   "scripts": {
     "build": "pnpm -r --filter \"./packages/*\" build",

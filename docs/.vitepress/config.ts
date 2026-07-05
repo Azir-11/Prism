@@ -23,6 +23,7 @@ export default defineConfig({
       { text: "指南", link: "/guide/what-is-prism", activeMatch: "/guide/" },
       { text: "生成逻辑", link: "/guide/how-it-works" },
       { text: "API", link: "/api/core", activeMatch: "/api/" },
+      { text: "在线体验", link: "https://prism-playground.vercel.app/" },
     ],
     sidebar: {
       "/guide/": [

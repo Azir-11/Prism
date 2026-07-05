@@ -1,6 +1,6 @@
 {
   "name": "@simple-prism/scss",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Sass/SCSS variables + maps adapter for Prism themes.",
   "keywords": [
     "color",
@@ -9,7 +9,7 @@
     "scss",
     "theme"
   ],
-  "homepage": "https://github.com/Azir-11/Prism#readme",
+  "homepage": "https://prism-docs-gamma.vercel.app/api/scss",
   "bugs": "https://github.com/Azir-11/Prism/issues",
   "license": "MIT",
   "author": "青菜白玉汤",
