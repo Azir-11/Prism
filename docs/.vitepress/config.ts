@@ -22,6 +22,7 @@ export default defineConfig({
     nav: [
       { text: "指南", link: "/guide/what-is-prism", activeMatch: "/guide/" },
       { text: "生成逻辑", link: "/guide/how-it-works" },
+      { text: "对比", link: "/compare/soybean-admin", activeMatch: "/compare/" },
       { text: "API", link: "/api/core", activeMatch: "/api/" },
       { text: "在线体验", link: "https://prism-playground.vercel.app/" },
     ],
@@ -52,6 +53,16 @@ export default defineConfig({
           items: [
             { text: "SSR 无闪暗色", link: "/guide/recipes-ssr" },
             { text: "无缝接入 shadcn/ui", link: "/guide/recipes-shadcn" },
+          ],
+        },
+      ],
+      "/compare/": [
+        {
+          text: "框架对比",
+          items: [
+            { text: "vs soybean-admin", link: "/compare/soybean-admin" },
+            { text: "vs vben5", link: "/compare/vben" },
+            { text: "vs gin-vue-admin", link: "/compare/gin-vue-admin" },
           ],
         },
       ],

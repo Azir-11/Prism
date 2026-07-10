@@ -12,7 +12,11 @@ export default defineConfig({
     },
   },
   test: {
-    include: ["packages/*/test/**/*.test.ts", "playground/test/**/*.test.ts"],
+    include: [
+      "packages/*/test/**/*.test.ts",
+      "playground/test/**/*.test.ts",
+      "docs/.vitepress/**/*.test.ts",
+    ],
     environment: "node",
   },
 });
