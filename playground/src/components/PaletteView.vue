@@ -369,4 +369,32 @@ async function copy(hex: string) {
     justify-content: flex-start;
   }
 }
+
+/* Phones: keep all 11 steps on a single screen width. `1fr` defaults to a
+   min-content floor (the hex text), which forces the row wider than the
+   viewport — switch to minmax(0, 1fr) so tracks can shrink, and drop the hex
+   label (still copied on tap) leaving just the readable step number. */
+@media (max-width: 520px) {
+  .swatches {
+    grid-template-columns: repeat(11, minmax(0, 1fr));
+    gap: 4px;
+  }
+  .swatch {
+    height: 46px;
+    padding: 4px 2px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+  }
+  .swatch-hex {
+    display: none;
+  }
+  .swatch-step {
+    font-size: 9px;
+  }
+  .swatch.role {
+    width: 46px;
+    height: 46px;
+  }
+}
 </style>

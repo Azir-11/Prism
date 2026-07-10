@@ -70,7 +70,7 @@ function download() {
 <template>
   <div class="card">
     <div class="row" style="margin-bottom: 14px; gap: 10px; flex-wrap: wrap">
-      <div class="seg">
+      <div class="seg tabs">
         <button v-for="t in TABS" :key="t.id" :class="{ active: tab === t.id }" @click="tab = t.id">
           {{ t.label }}
         </button>
@@ -107,5 +107,21 @@ function download() {
   font-size: 12px;
   line-height: 1.55;
   color: var(--foreground);
+}
+
+/* The five format tabs are wider than a phone screen; let the pill scroll
+   horizontally within its row instead of pushing the whole page sideways. */
+@media (max-width: 520px) {
+  .tabs {
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar {
+    display: none;
+  }
+  .tabs button {
+    white-space: nowrap;
+  }
 }
 </style>

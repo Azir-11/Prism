@@ -100,7 +100,11 @@ body::before {
 
 .main {
   padding: 30px 40px 90px;
+  width: 100%;
   max-width: 1180px;
+  /* Center within the content column so leftover space on wide screens
+     is balanced on both sides instead of piling up on the right. */
+  margin-inline: auto;
 }
 
 /* ----- brand ----- */
@@ -282,6 +286,7 @@ input[type="range"] {
   justify-content: space-between;
   margin-bottom: 24px;
   gap: 16px;
+  flex-wrap: wrap;
 }
 
 /* ----- segmented control ----- */
@@ -450,5 +455,20 @@ button {
   }
   .main {
     padding: 24px 20px 70px;
+  }
+}
+
+/* ----- large screens: put the extra width to work rather than leaving it empty ----- */
+@media (min-width: 1440px) {
+  .main {
+    max-width: 1320px;
+  }
+}
+
+@media (min-width: 1760px) {
+  .main {
+    max-width: 1440px;
+    padding-left: 52px;
+    padding-right: 52px;
   }
 }

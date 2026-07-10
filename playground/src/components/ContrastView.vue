@@ -299,4 +299,22 @@ const aaaPass = computed(() => rows.value.filter((r) => r.aaa).length);
     justify-content: flex-start;
   }
 }
+
+/* On wide screens the checklist is a tall single column with lots of empty
+   space beside it — lay the token checks out in two columns instead. */
+@media (min-width: 1500px) {
+  .checks {
+    grid-template-columns: 1fr 1fr;
+    column-gap: 44px;
+  }
+  /* With two columns the built-in border-per-row reads as a clean grid;
+     drop the divider under the bottom-most cell of each column. Removing the
+     last two items covers both an even count (final row) and an odd count
+     (bottom-left + the dangling bottom-right cell). */
+  .check:last-child,
+  .check:nth-last-child(2) {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+}
 </style>
