@@ -37,4 +37,42 @@ describe("toCssVariableMap", () => {
     expect(light["--prism-primary-50"]).toMatch(/^oklch\(/);
     expect(light["--prism-primary-50"]).not.toBe(dark["--prism-primary-50"]);
   });
+
+  it("honors suffix in map keys", () => {
+    const light = toCssVariableMap(theme, "light", { suffix: "color" });
+    expect(light["--prism-primary-50-color"]).toBeDefined();
+  });
+});
+
+describe("toCssVariables naming + rgb-channels", () => {
+  it("appends a suffix to every variable name", () => {
+    const css = toCssVariables(theme, { suffix: "color" });
+    expect(css).toContain("--prism-primary-500-color:");
+    expect(css).toContain("--prism-primary-on-solid-color:");
+  });
+
+  it("omits the prefix segment cleanly when prefix is empty", () => {
+    const css = toCssVariables(theme, { prefix: "" });
+    expect(css).toContain("--primary-500:");
+    expect(css).not.toContain("---");
+  });
+
+  it("emits gva-shaped bare-channel variables (prefix:'', suffix:'color', rgb-channels)", () => {
+    const css = toCssVariables(theme, {
+      format: "rgb-channels",
+      prefix: "",
+      suffix: "color",
+      semantic: false,
+    });
+    expect(css).toMatch(/--primary-500-color: \d+ \d+ \d+;/);
+    expect(css).not.toContain("oklch(");
+    expect(css).not.toContain("---");
+  });
+
+  it("keeps semantic references consistent with prefix and suffix", () => {
+    const css = toCssVariables(theme, { suffix: "color" });
+    // Semantic token names stay canonical; the vars they reference carry the suffix.
+    expect(css).toContain("--primary-foreground: var(--prism-primary-on-solid-color)");
+    expect(css).toContain("--background: var(--prism-neutral-50-color)");
+  });
 });

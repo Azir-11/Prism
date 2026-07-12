@@ -17,7 +17,7 @@ export type Appearance = "light" | "dark";
 export type Gamut = "srgb" | "p3";
 
 /** Output color notation an adapter can emit a value in. */
-export type ColorFormat = "oklch" | "hex" | "rgb" | "hsl";
+export type ColorFormat = "oklch" | "hex" | "rgb" | "rgb-channels" | "hsl";
 
 /** A color-vision deficiency Prism can simulate for accessibility previews. */
 export type CvdType = "protan" | "deutan" | "tritan";

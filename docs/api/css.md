@@ -50,14 +50,26 @@ const css = toCssVariables(generateTheme({ primary: "#3b82f6" }));
 
 ### CssOptions
 
-| 选项           | 类型                                 | 默认      | 说明             |
-| -------------- | ------------------------------------ | --------- | ---------------- |
-| `prefix`       | `string`                             | `'prism'` | 色阶变量前缀。   |
-| `rootSelector` | `string`                             | `':root'` | 亮色块选择器。   |
-| `darkSelector` | `string`                             | `'.dark'` | 暗色块选择器。   |
-| `semantic`     | `boolean`                            | `true`    | 是否输出语义层。 |
-| `format`       | `'oklch' \| 'hex' \| 'rgb' \| 'hsl'` | `'oklch'` | 取值格式。       |
-| `indent`       | `string`                             | `'  '`    | 缩进。           |
+| 选项           | 类型                                                   | 默认      | 说明                                                     |
+| -------------- | ------------------------------------------------------ | --------- | -------------------------------------------------------- |
+| `prefix`       | `string`                                               | `'prism'` | 色阶变量前缀；空串 `''` 则省略前缀段（不会产生 `---`）。 |
+| `suffix`       | `string`                                               | `''`      | 变量名后缀，如 `'color'` → `--primary-500-color`。       |
+| `rootSelector` | `string`                                               | `':root'` | 亮色块选择器。                                           |
+| `darkSelector` | `string`                                               | `'.dark'` | 暗色块选择器。                                           |
+| `semantic`     | `boolean`                                              | `true`    | 是否输出语义层。                                         |
+| `format`       | `'oklch' \| 'hex' \| 'rgb' \| 'rgb-channels' \| 'hsl'` | `'oklch'` | 取值格式；`rgb-channels` 产出裸通道 `59 130 246`。       |
+| `indent`       | `string`                                               | `'  '`    | 缩进。                                                   |
+
+### 接入 UnoCSS / `rgb(var())` 惯用法项目
+
+soybean-admin、gin-vue-admin 一类模板把颜色存成**裸通道**（`--primary-500-color: 59 130 246`），配合 `rgb(var(--primary-500-color) / α)` 做透明度。用 `rgb-channels` + `prefix`/`suffix` 即可直接产出这一形状，接入方无需再写转换 shim：
+
+```ts
+toCssVariables(theme, { format: "rgb-channels", prefix: "", suffix: "color", semantic: false });
+// :root { --primary-500-color: 59 130 246; … } + .dark { … }
+```
+
+> 若目标就是 UnoCSS，直接用 [`@simple-prism/unocss`](/api/unocss) 的 `presetPrism` 更省事 —— 它把变量注入与带 `<alpha-value>` 的 `theme.colors` 一并做掉。
 
 ## toCssVariableMap
 

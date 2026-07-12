@@ -11,6 +11,7 @@ export {
   clampToGamut,
   formatOklch,
   formatRgb,
+  formatRgbChannels,
   formatHsl,
   formatIn,
   toHex,

@@ -73,6 +73,17 @@ export function formatRgb(o: Oklch): string {
   return `rgb(${r} ${g} ${b})`;
 }
 
+/**
+ * Format as bare space-separated sRGB channels (`"59 130 246"`), no `rgb()`
+ * wrapper. For the `rgb(var(--token) / <alpha-value>)` idiom used by UnoCSS /
+ * Tailwind admin templates, where the custom property holds only the channels.
+ * Alpha is intentionally dropped — it is supplied by the wrapping `rgb()`.
+ */
+export function formatRgbChannels(o: Oklch): string {
+  const [r, g, b] = toSrgb255(o).map((v) => Math.round(v));
+  return `${r} ${g} ${b}`;
+}
+
 /** Format as a modern space-separated CSS `hsl()` string, gamut-mapped to sRGB. */
 export function formatHsl(o: Oklch): string {
   const safe = clampToGamut(o, "srgb");
@@ -96,6 +107,8 @@ export function formatIn(o: Oklch, format: ColorFormat): string {
       return toHex(o);
     case "rgb":
       return formatRgb(o);
+    case "rgb-channels":
+      return formatRgbChannels(o);
     case "hsl":
       return formatHsl(o);
     default:

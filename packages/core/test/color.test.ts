@@ -1,5 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { deltaEOK, formatHsl, formatRgb, parseColor, simulateCvd } from "../src/index";
+import {
+  deltaEOK,
+  formatHsl,
+  formatIn,
+  formatRgb,
+  formatRgbChannels,
+  parseColor,
+  simulateCvd,
+} from "../src/index";
 
 describe("formatRgb", () => {
   it("formats a color as a modern space-separated sRGB rgb() string", () => {
@@ -24,6 +32,34 @@ describe("formatRgb", () => {
   it("includes an alpha channel when alpha < 1", () => {
     const rgb = formatRgb({ l: 0.6, c: 0.15, h: 250, alpha: 0.5 });
     expect(rgb).toMatch(/^rgb\(\d+ \d+ \d+ \/ 0\.5\)$/);
+  });
+});
+
+describe("formatRgbChannels", () => {
+  it("formats a color as bare space-separated sRGB channels (no rgb() wrapper)", () => {
+    const chan = formatRgbChannels(parseColor("#3b82f6"));
+    expect(chan).toMatch(/^\d+ \d+ \d+$/);
+    const [r, g, b] = chan.split(" ").map(Number);
+    // #3b82f6 === 59 130 246; allow ±1 for OKLCH round-trip rounding.
+    expect(Math.abs(r - 59)).toBeLessThanOrEqual(1);
+    expect(Math.abs(g - 130)).toBeLessThanOrEqual(1);
+    expect(Math.abs(b - 246)).toBeLessThanOrEqual(1);
+  });
+
+  it("emits rounded integers in byte range (no fractional channels)", () => {
+    const chan = formatRgbChannels({ l: 0.7, c: 0.37, h: 150 });
+    for (const seg of chan.split(" ")) {
+      expect(seg).toMatch(/^\d+$/);
+      const v = Number(seg);
+      expect(Number.isInteger(v)).toBe(true);
+      expect(v).toBeGreaterThanOrEqual(0);
+      expect(v).toBeLessThanOrEqual(255);
+    }
+  });
+
+  it("is selectable via formatIn with the 'rgb-channels' format", () => {
+    const o = parseColor("#3b82f6");
+    expect(formatIn(o, "rgb-channels")).toBe(formatRgbChannels(o));
   });
 });
 
