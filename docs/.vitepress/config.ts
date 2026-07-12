@@ -72,6 +72,7 @@ export default defineConfig({
           items: [
             { text: "@simple-prism/core", link: "/api/core" },
             { text: "@simple-prism/css", link: "/api/css" },
+            { text: "@simple-prism/unocss", link: "/api/unocss" },
             { text: "@simple-prism/tailwind", link: "/api/tailwind" },
             { text: "@simple-prism/scss", link: "/api/scss" },
             { text: "@simple-prism/tokens", link: "/api/tokens" },
@@ -95,6 +96,7 @@ export default defineConfig({
       alias: {
         "@simple-prism/core": src("../../packages/core/src/index.ts"),
         "@simple-prism/css": src("../../packages/css/src/index.ts"),
+        "@simple-prism/unocss": src("../../packages/unocss/src/index.ts"),
         "@simple-prism/scss": src("../../packages/scss/src/index.ts"),
         "@simple-prism/tailwind": src("../../packages/tailwind/src/index.ts"),
         "@simple-prism/tokens": src("../../packages/tokens/src/index.ts"),

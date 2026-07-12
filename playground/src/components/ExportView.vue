@@ -9,9 +9,10 @@ import { computed, ref } from "vue";
 
 const props = defineProps<{ theme: PrismTheme }>();
 
-type Tab = "css" | "tailwind" | "scss" | "json" | "dtcg";
+type Tab = "css" | "unocss" | "tailwind" | "scss" | "json" | "dtcg";
 const TABS: { id: Tab; label: string }[] = [
   { id: "css", label: "CSS 变量" },
+  { id: "unocss", label: "UnoCSS" },
   { id: "tailwind", label: "Tailwind v4" },
   { id: "scss", label: "SCSS" },
   { id: "json", label: "JSON" },
@@ -21,12 +22,44 @@ const tab = ref<Tab>("css");
 const format = ref<ColorFormat>("oklch");
 const copied = ref(false);
 
-const FORMATS: ColorFormat[] = ["oklch", "hex", "rgb", "hsl"];
-// JSON and DTCG carry hex/oklch already, so the format switch only drives CSS / Tailwind / SCSS.
-const formatless = computed(() => tab.value === "json" || tab.value === "dtcg");
+const FORMATS: ColorFormat[] = ["oklch", "hex", "rgb", "rgb-channels", "hsl"];
+// JSON/DTCG carry hex+oklch already and UnoCSS emits a ready config, so the
+// format switch only drives CSS / Tailwind / SCSS.
+const formatless = computed(
+  () => tab.value === "json" || tab.value === "dtcg" || tab.value === "unocss",
+);
+
+// Rebuild the exact `presetPrism` input from the seeds the user actually supplied,
+// so the exported config reproduces this theme (custom semantics included).
+const seedInput = computed<Record<string, string>>(() => {
+  const input: Record<string, string> = {};
+  for (const s of props.theme.seeds) if (s.source === "input") input[s.name] = s.hex;
+  if (!input.primary) {
+    input.primary = props.theme.seeds.find((s) => s.name === "primary")?.hex ?? "#3b82f6";
+  }
+  return input;
+});
+
+const unocssConfig = computed(() => {
+  const args = `{ ${Object.entries(seedInput.value)
+    .map(([k, v]) => `${k}: ${JSON.stringify(v)}`)
+    .join(", ")} }`;
+  return `// npm i @simple-prism/core @simple-prism/unocss
+
+import { defineConfig, presetUno } from "unocss";
+import { presetPrism } from "@simple-prism/unocss";
+
+export default defineConfig({
+  presets: [presetUno(), presetPrism(${args})],
+});
+
+// 开箱即用：bg-primary · bg-primary-600 · bg-primary/10 · text-primary-foreground · dark:bg-primary-300
+`;
+});
 
 const outputs = computed<Record<Tab, string>>(() => ({
   css: toCssVariables(props.theme, { format: format.value }),
+  unocss: unocssConfig.value,
   tailwind: toTailwindCss(props.theme, { format: format.value }),
   scss: toScss(props.theme, { format: format.value === "oklch" ? "hex" : format.value }),
   json: JSON.stringify(toJSON(props.theme), null, 2),
@@ -37,6 +70,7 @@ const current = computed(() => outputs.value[tab.value]);
 
 const FILENAMES: Record<Tab, string> = {
   css: "prism.css",
+  unocss: "uno.config.ts",
   tailwind: "prism.tailwind.css",
   scss: "_prism.scss",
   json: "prism.tokens.json",

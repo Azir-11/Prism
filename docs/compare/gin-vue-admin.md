@@ -33,3 +33,7 @@ gin-vue-admin 前端基于 Element Plus，但它的主色阶**不是** Element P
 ## 小结
 
 gin-vue-admin 贴合 Element Plus 生态、依赖轻；但其主色「色阶」是无深色端的单向提亮、且非感知均匀。Prism 提供完整的 50–950 双端色阶、角色合约与求解出的对比度。
+
+::: tip 想直接换掉这套调色？
+新版 gin-vue-admin 已迁到 UnoCSS + `rgb(var(--x-color))` 惯用法，可**零 shim** 接入 Prism：UnoCSS 项目用 [`@simple-prism/unocss`](/api/unocss) 的 `presetPrism`；只需裸通道变量的项目用 [`@simple-prism/css`](/api/css) 的 `format: 'rgb-channels'` + `suffix: 'color'`。50–950 编号与 `primary/info/success/warning/error` 角色名两边天然对齐。
+:::

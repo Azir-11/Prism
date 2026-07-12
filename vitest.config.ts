@@ -9,6 +9,7 @@ export default defineConfig({
       "@simple-prism/core": resolve(root, "packages/core/src/index.ts"),
       "@simple-prism/css": resolve(root, "packages/css/src/index.ts"),
       "@simple-prism/tailwind": resolve(root, "packages/tailwind/src/index.ts"),
+      "@simple-prism/unocss": resolve(root, "packages/unocss/src/index.ts"),
     },
   },
   test: {

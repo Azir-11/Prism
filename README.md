@@ -29,6 +29,7 @@ const css = toCssVariables(theme); // :root { … } + .dark { … }
 packages/
   core/        @simple-prism/core      颜色科学与令牌生成（唯一依赖 culori）
   css/         @simple-prism/css       CSS 变量适配器
+  unocss/      @simple-prism/unocss    UnoCSS 预设 + theme 适配器
   tailwind/    @simple-prism/tailwind  Tailwind v4 @theme 适配器
   scss/        @simple-prism/scss      Sass/SCSS 变量 + map 适配器
   tokens/      @simple-prism/tokens    W3C/DTCG 设计令牌适配器
@@ -42,6 +43,7 @@ docs/          VitePress 2      中文文档（含色彩美学理念）
 | -------------------------------------------------------------------------------- | ----------- | -------------------------------------------------- |
 | [`@simple-prism/core`](https://www.npmjs.com/package/@simple-prism/core)         | 生成引擎    | `generateTheme`、`generateScale`、调和与对比度工具 |
 | [`@simple-prism/css`](https://www.npmjs.com/package/@simple-prism/css)           | CSS 变量    | `toCssVariables`、`toCssVariableMap`               |
+| [`@simple-prism/unocss`](https://www.npmjs.com/package/@simple-prism/unocss)     | UnoCSS      | `presetPrism`、`toUnoTheme`                        |
 | [`@simple-prism/tailwind`](https://www.npmjs.com/package/@simple-prism/tailwind) | Tailwind v4 | `toTailwindCss`、`toTailwindColors`                |
 | [`@simple-prism/scss`](https://www.npmjs.com/package/@simple-prism/scss)         | Sass/SCSS   | `toScss`                                           |
 | [`@simple-prism/tokens`](https://www.npmjs.com/package/@simple-prism/tokens)     | W3C/DTCG    | `toDesignTokens`、`toDesignTokensJson`             |
