@@ -1,6 +1,6 @@
 {
   "name": "@simple-prism/scss",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "description": "Sass/SCSS variables + maps adapter for Prism themes.",
   "keywords": [
     "color",

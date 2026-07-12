@@ -1,6 +1,6 @@
 {
   "name": "@simple-prism/tokens",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "description": "W3C/DTCG design-tokens JSON adapter for Prism themes (Style Dictionary / Tokens Studio ready).",
   "keywords": [
     "color",

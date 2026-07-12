@@ -1,6 +1,6 @@
 {
   "name": "@simple-prism/css",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "description": "CSS custom-properties adapter for Prism themes (:root + .dark).",
   "keywords": [
     "color",
