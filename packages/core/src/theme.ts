@@ -15,8 +15,10 @@ import { formatOklch, parseColor, toHex } from "./color";
 import { apcaLc, wcagRatio } from "./contrast";
 import { generateScale } from "./scale";
 import { deriveNeutral, deriveSecondary, deriveSemantics, deriveTertiary } from "./harmony";
+import { version } from "../package.json";
 
-export const VERSION = "0.1.0";
+/** Library version, sourced from package.json so it can never drift out of sync. */
+export const VERSION: string = version;
 
 type Scales = PrismTheme["scales"];
 
@@ -188,6 +190,7 @@ export function generateTheme(input: PrismInput): PrismTheme {
       gamut,
       contrast: input.contrast,
       hueTorsion: name === "neutral" ? 0 : torsion,
+      seedPlacement: input.seedPlacement,
     };
     scales[name] = {
       light: generateScale(seed, { ...base, appearance: "light" }),

@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { generateTheme, resolveSemantic, toJSON, verifyContrast } from "../src/index";
+import { generateTheme, resolveSemantic, toJSON, verifyContrast, VERSION } from "../src/index";
+import pkg from "../package.json";
 
 describe("generateTheme", () => {
   const theme = generateTheme({ primary: "#3b82f6" });
@@ -61,6 +62,18 @@ describe("generateTheme", () => {
     const json = toJSON(theme);
     expect(() => JSON.stringify(json)).not.toThrow();
     expect((json.tokens as Record<string, unknown>).light).toBeDefined();
+  });
+
+  it("reports a VERSION that matches package.json", () => {
+    expect(VERSION).toBe(pkg.version);
+    expect(theme.meta.version).toBe(pkg.version);
+  });
+
+  it("places a dark brand seed on primary step 500 (500 = brand)", () => {
+    const custom = generateTheme({ primary: "#2264f2" });
+    expect(custom.scales.primary.light.seedStep).toBe(500);
+    expect(custom.scales.primary.light.steps[500].hex).toBe("#2264f2");
+    expect(resolveSemantic(custom, "light", "primary").hex).toBe("#2264f2");
   });
 
   it("honors explicit overrides and accents", () => {

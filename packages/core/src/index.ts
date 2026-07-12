@@ -33,7 +33,7 @@ export {
   type OnSolidOptions,
 } from "./contrast";
 
-export { chromaBell, nearestStepByLightness, generateScale } from "./scale";
+export { chromaBell, nearestStepByLightness, anchorRampAtSolid, generateScale } from "./scale";
 
 export {
   deriveSecondary,

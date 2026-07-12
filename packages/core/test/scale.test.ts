@@ -68,3 +68,47 @@ describe("generateScale", () => {
     expect(hDark).toBeGreaterThan(hLight + 2);
   });
 });
+
+describe("seed placement", () => {
+  // A dark-ish brand blue whose lightness (L≈0.55) previously pinned it to step 600.
+  const DARK_BLUE = "#2264f2";
+  // Seeds spanning a wide lightness range — the contract must hold for all of them.
+  const SPREAD = ["#2264f2", "#3b82f6", "#111827", "#f59e0b", "#a5f3fc", "#7c3aed"];
+
+  it("puts the exact brand seed on step 500 (the '500 = brand' contract)", () => {
+    const scale = generateScale(DARK_BLUE, { appearance: "light" });
+    expect(scale.seedStep).toBe(500);
+    expect(scale.steps[500].hex).toBe(DARK_BLUE);
+  });
+
+  it("anchors any seed on step 500 regardless of its lightness", () => {
+    for (const seed of SPREAD) {
+      for (const appearance of ["light", "dark"] as const) {
+        const scale = generateScale(seed, { appearance });
+        const parsed = parseColor(seed);
+        expect(scale.seedStep, `${seed} ${appearance}`).toBe(500);
+        expect(deltaEOK(scale.steps[500].value, parsed), `${seed} ${appearance}`).toBeLessThan(
+          0.01,
+        );
+      }
+    }
+  });
+
+  it("keeps the ramp strictly monotonic after re-anchoring a dark seed", () => {
+    const light = generateScale(DARK_BLUE, { appearance: "light" });
+    const lsLight = STEP_KEYS.map((k) => light.steps[k].value.l);
+    for (let i = 1; i < lsLight.length; i++) expect(lsLight[i]).toBeLessThan(lsLight[i - 1]);
+
+    const dark = generateScale(DARK_BLUE, { appearance: "dark" });
+    const lsDark = STEP_KEYS.map((k) => dark.steps[k].value.l);
+    for (let i = 1; i < lsDark.length; i++) expect(lsDark[i]).toBeGreaterThan(lsDark[i - 1]);
+  });
+
+  it("keeps the legacy 'nearest' placement available (seed floats by lightness)", () => {
+    const scale = generateScale(DARK_BLUE, { appearance: "light", seedPlacement: "nearest" });
+    // With the fixed ramp, L≈0.553 lands on step 600, not 500.
+    expect(scale.seedStep).toBe(600);
+    expect(scale.steps[600].hex).toBe(DARK_BLUE);
+    expect(scale.steps[500].hex).not.toBe(DARK_BLUE);
+  });
+});

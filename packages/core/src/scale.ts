@@ -49,18 +49,45 @@ export function nearestStepByLightness(
 }
 
 /**
+ * Re-anchor a lightness ramp so `seedL` lands exactly on the solid step (500),
+ * holding both endpoints fixed and affine-rescaling each half around the anchor.
+ *
+ * This is what makes `steps[500]` equal the brand seed for *any* seed lightness —
+ * a dark brand blue no longer drifts onto 600 — so the "500 = brand color" token
+ * contract holds regardless of how light or dark the seed is, while the ramp keeps
+ * its strict monotonicity and its hand-tuned near-white / near-black ends.
+ */
+export function anchorRampAtSolid(base: readonly number[], seedL: number): number[] {
+  const a = STEP_KEYS.indexOf(SOLID_STEP);
+  const lo = base[0];
+  const hi = base[base.length - 1];
+  // Keep the anchor strictly inside the endpoint band so the ramp stays monotonic
+  // even for a near-white or near-black seed.
+  const anchor = clamp(seedL, Math.min(lo, hi) + 1e-4, Math.max(lo, hi) - 1e-4);
+  return base.map((l, i) => {
+    if (i === a) return anchor;
+    if (i < a) return lo + ((l - lo) / (base[a] - lo)) * (anchor - lo);
+    return anchor + ((l - base[a]) / (hi - base[a])) * (hi - anchor);
+  });
+}
+
+/**
  * Generate one 11-step scale from a seed color.
  *
- * Pipeline: build a fixed lightness ramp at the seed's hue; modulate chroma by a
- * bell envelope scaled so the ramp passes through the seed's own chroma; apply a
- * touch of hue torsion; pin the seed verbatim at its nearest step; then
- * contrast-solve the two text tones and the on-solid foreground.
+ * Pipeline: build the lightness ramp at the seed's hue — re-anchored so the seed
+ * owns the solid step (500) unless `seedPlacement: 'nearest'` is requested;
+ * modulate chroma by a bell envelope scaled so the ramp passes through the seed's
+ * own chroma; apply a touch of hue torsion; pin the seed verbatim at its step;
+ * then contrast-solve the two text tones and the on-solid foreground.
  */
 export function generateScale(seedInput: ColorInput | Oklch, opts: ScaleOptions = {}): Scale {
   const seed = typeof seedInput === "string" ? parseColor(seedInput) : normalizeOklch(seedInput);
   const appearance = opts.appearance ?? "light";
   const gamut = opts.gamut ?? "srgb";
-  const ramp = opts.lightnessRamp ?? (appearance === "dark" ? LIGHTNESS_DARK : LIGHTNESS_LIGHT);
+  const placement = opts.seedPlacement ?? "solid";
+  const baseRamp = opts.lightnessRamp ?? (appearance === "dark" ? LIGHTNESS_DARK : LIGHTNESS_LIGHT);
+  // In "solid" placement the ramp is re-anchored so the seed lands on step 500.
+  const ramp = placement === "solid" ? anchorRampAtSolid(baseRamp, seed.l) : baseRamp;
   const torsion = opts.hueTorsion ?? DEFAULT_HUE_TORSION;
   const textLc = opts.contrast?.textLc ?? DEFAULT_CONTRAST.textLc;
   const textContrastLc = opts.contrast?.textContrastLc ?? DEFAULT_CONTRAST.textContrastLc;
@@ -79,8 +106,9 @@ export function generateScale(seedInput: ColorInput | Oklch, opts: ScaleOptions 
     steps[key] = makeSwatch(clampToGamut({ l, c: chromaAt(l), h: hueAt(l) }, gamut), gamut);
   });
 
-  // Pin the exact seed at its closest step within the active ramp (keeps monotonicity).
-  const seedStep = nearestStepByLightness(seed.l, ramp);
+  // Pin the exact seed. "solid" placement gives it step 500 (the brand contract);
+  // "nearest" drops it on whichever step its lightness is closest to.
+  const seedStep = placement === "solid" ? SOLID_STEP : nearestStepByLightness(seed.l, ramp);
   steps[seedStep] = makeSwatch(seed, gamut);
 
   // Contrast targets resolved against the subtle background (step 100).

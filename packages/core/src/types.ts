@@ -98,6 +98,16 @@ export interface HarmonyOptions {
   semanticNudge?: number;
 }
 
+/**
+ * Where the seed color is placed within its generated scale.
+ * - `solid` (default): the ramp is re-anchored so the seed owns the solid step
+ *   (500), so `steps[500]` equals the brand seed for any seed lightness — the
+ *   predictable "500 = brand color" token contract.
+ * - `nearest`: legacy behavior — the seed is dropped on whichever step its
+ *   lightness is closest to on the fixed ramp, so it may land off 500.
+ */
+export type SeedPlacement = "solid" | "nearest";
+
 export interface ScaleOptions {
   name?: string;
   appearance?: Appearance;
@@ -107,6 +117,8 @@ export interface ScaleOptions {
   hueTorsion?: number;
   /** Override the 11-entry lightness ramp (values 0..1). */
   lightnessRamp?: readonly number[];
+  /** How the seed is pinned within the scale. Default `solid`. */
+  seedPlacement?: SeedPlacement;
 }
 
 export interface PrismInput {
@@ -134,6 +146,8 @@ export interface PrismInput {
   harmony?: HarmonyOptions;
   /** Degrees of hue torsion across each ramp. Default 4. */
   hueTorsion?: number;
+  /** How each seed is pinned within its scale. Default `solid` (seed owns step 500). */
+  seedPlacement?: SeedPlacement;
 }
 
 export interface ResolvedSeed {
